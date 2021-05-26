@@ -1,1 +1,1 @@
-web: waitress-serve --port=$PORT deboo.wsgi:application
+web: gunicorn deboo.wsgi
