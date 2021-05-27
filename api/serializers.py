@@ -5,7 +5,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = UserProfile
-        fields = ('title', 'dob', 'address', 'country', 'city', 'zip', 'photo')
+        fields = ('name', 'birthdate', 'age', 'address', 'country', 'city', 'zip', 'photo')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -32,8 +32,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         instance.email = validated_data.get('email', instance.email)
         instance.save()
 
-        profile.title = profile_data.get('title', profile.title)
-        profile.dob = profile_data.get('dob', profile.dob)
+        profile.name = profile_data.get('name', profile.name)
+        profile.birthdate = profile_data.get('birthdate', profile.birthdate)
+        profile.age = profile_data.get('age', profile.age)
         profile.address = profile_data.get('address', profile.address)
         profile.country = profile_data.get('country', profile.country)
         profile.city = profile_data.get('city', profile.city)
