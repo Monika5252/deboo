@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = "django-insecure-q&&h@y1mt4662f=yybh5w@h=6cyh-r6zmqo2+0*@gywttkt01r"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -143,6 +143,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
 }
+
+datestyle = 'iso, dmy'
 
 REST_USE_JWT = True
 
