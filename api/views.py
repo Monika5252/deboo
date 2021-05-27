@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
-from api.models import ContactUs, Feedback, User
-from api.serializers import ContactUsSerializer, UserSerializer, UserFeedbackSerializer
+from api.models import ContactUs, Feedback, Setup, User
+from api.serializers import ContactUsSerializer, SetupSerializer, UserSerializer, UserFeedbackSerializer
 from api.permissions import IsLoggedInUserOrAdmin, IsAdminUser
 from rest_framework.response import Response
 from rest_framework import status
@@ -215,3 +215,42 @@ class ContactUsApiView(APIView):
             {"res": "Contact deleted!"},
             status=status.HTTP_200_OK
         )
+
+
+class SetupApiView(APIView):
+    # add permission to check if user is authenticated
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        '''
+        List all the Setups data
+        '''
+        setup = Setup.objects.all()
+        serializer = SetupSerializer(setup, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 2. Create
+    def post(self, request, *args, **kwargs):
+        '''
+        Create Setup with given data
+        '''
+
+        data = {
+            'name': request.data.get('name'), 
+            'address': request.data.get('address'),
+            'longitude': request.data.get('longitude'), 
+            'latitude': request.data.get('latitude'),
+            'country': request.data.get('country'),
+            'zip': request.data.get('zip'), 
+            'photo': request.data.get('photo'),
+            'isOccupied': request.data.get('isOccupied'),
+            'isCleaned': request.data.get('isCleaned'), 
+            'createdBy': request.user.id,
+            'updatedBy': request.user.id
+        }
+        serializer = SetupSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

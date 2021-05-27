@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib import admin
-from .models import ContactUs, Feedback, User, UserProfile
+from .models import ContactUs, Feedback, Setup, User, UserProfile
 
 
 class UserProfileInline(admin.StackedInline):
@@ -18,8 +18,14 @@ class UserContactInline(admin.ModelAdmin):
     model = ContactUs
     can_delete = True
 
+class SetupInline(admin.ModelAdmin):
+    model = Setup
+    can_delete = True
+    list_display = ('name', 'longitude', 'latitude', 'isOccupied', 'zip')
+
 admin.site.register(Feedback, UserFeedbackInline)
 admin.site.register(ContactUs, UserContactInline)
+admin.site.register(Setup, SetupInline)
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):

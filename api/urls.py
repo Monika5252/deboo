@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 from rest_framework import routers
-from api.views import ContactApiView, ContactUsApiView, FeedbackApiView, FeedbackDetailsApiView, UserViewSet
+from api.views import ContactApiView, ContactUsApiView, FeedbackApiView, FeedbackDetailsApiView, SetupApiView, UserViewSet
 from django.urls import path, include
 
 router = routers.DefaultRouter()
@@ -14,4 +14,6 @@ urlpatterns = [
 
     url(r'^contact/', ContactApiView.as_view()),
     path('contactdetail/<int:contact_id>/', ContactUsApiView.as_view()),
+
+    url(r'^setup/', SetupApiView.as_view()),
 ]
