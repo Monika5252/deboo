@@ -1,14 +1,25 @@
 from django.contrib import admin
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-
-from .models import User, UserProfile
+from django.contrib import admin
+from .models import ContactUs, Feedback, User, UserProfile
 
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
-    can_delete = False
+    can_delete = True
 
+class UserFeedbackInline(admin.ModelAdmin):
+    model = Feedback
+    can_delete = True
+
+class UserContactInline(admin.ModelAdmin):
+    model = ContactUs
+    can_delete = True
+
+admin.site.register(Feedback, UserFeedbackInline)
+admin.site.register(ContactUs, UserContactInline)
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):

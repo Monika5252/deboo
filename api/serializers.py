@@ -1,12 +1,11 @@
 from rest_framework import serializers
-from api.models import User, UserProfile
+from api.models import ContactUs, Feedback, User, UserProfile
 
 class UserProfileSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = UserProfile
         fields = ('name', 'birthdate', 'age', 'address', 'country', 'city', 'zip', 'photo')
-
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     profile = UserProfileSerializer(required=True)
@@ -43,3 +42,13 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         profile.save()
 
         return instance
+
+class UserFeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feedback
+        fields = ('id','mobile', 'rate', 'text', 'user')
+
+class ContactUsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactUs
+        fields = ('id','contact','mobile')
