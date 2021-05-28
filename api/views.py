@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
-from api.models import ContactUs, Feedback, Setup, User
-from api.serializers import ContactUsSerializer, SetupSerializer, UserSerializer, UserFeedbackSerializer
+from api.models import ContactUs, Feedback, Notification, Setup, User
+from api.serializers import ContactUsSerializer, NotificationSerializer, SetupSerializer, UserSerializer, UserFeedbackSerializer
 from api.permissions import IsLoggedInUserOrAdmin, IsAdminUser
 from rest_framework.response import Response
 from rest_framework import status
@@ -241,6 +241,7 @@ class SetupApiView(APIView):
             'longitude': request.data.get('longitude'), 
             'latitude': request.data.get('latitude'),
             'country': request.data.get('country'),
+            'city': request.data.get('city'), 
             'zip': request.data.get('zip'), 
             'photo': request.data.get('photo'),
             'isOccupied': request.data.get('isOccupied'),
@@ -254,3 +255,137 @@ class SetupApiView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class SetupDetailsApiView(APIView):
+    # add permission to check if user is authenticated
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, setup_id):
+        '''
+        Helper method to get the object with given setup id
+        '''
+        try:
+            return Setup.objects.get(id=setup_id)
+        except Setup.DoesNotExist:
+            return None
+
+    # 3. Retrieve
+    def get(self, setup_id, *args, **kwargs):
+        '''
+        Retrieves the Contact us with given contact id
+        '''
+        setup_instance = self.get_object(setup_id)
+        if not setup_instance:
+            return Response(
+                {"res": "Record with this Setup id does not exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = SetupSerializer(setup_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 4. Update
+    def put(self, request, setup_id, *args, **kwargs):
+        '''
+        Updates the setup details with given setup id if exists
+        '''
+        setup_instance = self.get_object(setup_id)
+        if not setup_instance:
+            return Response(
+                {"res": "Record with this setup id does not exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        data = {
+            'name': request.data.get('name'), 
+            'address': request.data.get('address'),
+            'longitude': request.data.get('longitude'), 
+            'latitude': request.data.get('latitude'),
+            'country': request.data.get('country'),
+            'city': request.data.get('city'), 
+            'zip': request.data.get('zip'), 
+            'photo': request.data.get('photo'),
+            'isOccupied': request.data.get('isOccupied'),
+            'isCleaned': request.data.get('isCleaned'),
+            'updatedBy': request.user.id
+        }
+        serializer = SetupSerializer(instance = setup_instance, data=data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # 5. Delete
+    def delete(self, setup_id, *args, **kwargs):
+        '''
+        Deletes Setup details with given setup id if exists
+        '''
+        setup_instance = self.get_object(setup_id)
+        if not setup_instance:
+            return Response(
+                {"res": "Object with this setup id does not exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        setup_instance.delete()
+        return Response(
+            {"res": "Setup deleted!"},
+            status=status.HTTP_200_OK
+        )
+
+class OccupySetupView(APIView):
+    # add permission to check if user is authenticated
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, setup_id):
+        '''
+        Helper method to get the object with given setup id
+        '''
+        try:
+            return Setup.objects.get(id=setup_id)
+        except Setup.DoesNotExist:
+            return None
+
+
+    def put(self, request, setup_id, *args, **kwargs):
+        '''
+        Updates the setup details with given setup id if exists
+        '''
+        setup_instance = self.get_object(setup_id)
+        if not setup_instance:
+            return Response(
+                {"res": "Record with this setup id does not exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        data = {
+            'isOccupied': request.data.get('isOccupied'),
+            'occupiedBy': request.user.id
+        }
+        serializer = SetupSerializer(instance = setup_instance, data=data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            print(serializer.data, 'saved data')
+            # note = {
+            # 'text': 'this is test notification', 
+            # 'isRead': 'False',
+            # 'setup': '1',
+            # 'user': request.user.id,
+            # }
+            # print(note, 'notification data')
+            # serializer_notification = NotificationSerializer(data=note)
+            # if serializer_notification.is_valid():
+            #     serializer_notification.save()
+            #     print(serializer_notification, 'notify')
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class NotificationApiView(APIView):
+    # add permission to check if user is authenticated
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        '''
+        List all the Notifications data
+        '''
+        notify = Notification.objects.all()
+        serializer = NotificationSerializer(notify, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

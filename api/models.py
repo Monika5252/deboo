@@ -50,12 +50,14 @@ class Setup(models.Model):
     latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=False)
     country = models.CharField(max_length=50,blank=True)
     city = models.CharField(max_length=50,blank=True)
+    fees = models.IntegerField()
     zip = models.CharField(max_length=7,blank=True)
     photo = models.CharField(blank=True,null=True,max_length=500)
     isOccupied = models.BooleanField(default=False, blank=False)
     isCleaned = models.BooleanField(default=True, blank=True)
     createdBy = models.CharField(blank=True, max_length=4)
     updatedBy = models.CharField(blank=True, max_length=4)
+    occupiedBy = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, related_name='users')
 
 # class Transaction(models.Model):
 #     transaction_id = models.CharField(max_length=30, blank=False)
@@ -64,13 +66,13 @@ class Setup(models.Model):
 #     user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, related_name='user')
 #     setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='setup')
 
-# class Notification(models.Model):
-#     text = models.CharField(max_length=255, blank=False)
-#     isRead = models.BooleanField(default=False)
-#     createdAt = models.DateField()
-#     updatedAt = models.DateField()
-#     setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='setup')
-#     user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, related_name='user')
+class Notification(models.Model):
+    text = models.CharField(max_length=255, blank=False)
+    isRead = models.BooleanField(default=False)
+    createdAt = models.DateField()
+    updatedAt = models.DateField()
+    setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='setups')
+    user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, related_name='userss')
 
 
 
