@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 class User(AbstractUser):
     username = models.CharField(blank=True, max_length=60, null=True)
@@ -57,20 +58,20 @@ class Setup(models.Model):
     isCleaned = models.BooleanField(default=True, blank=True)
     createdBy = models.CharField(blank=True, max_length=4)
     updatedBy = models.CharField(blank=True, max_length=4)
-    occupiedBy = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, related_name='users')
+    occupiedBy = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, null = True, related_name='users')
 
-# class Transaction(models.Model):
-#     transaction_id = models.CharField(max_length=30, blank=False)
-#     money = models.CharField(max_length=255, blank=False)
-#     date = models.DateField()
-#     user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, related_name='user')
-#     setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='setup')
+class Transaction(models.Model):
+    transaction_id = models.CharField(max_length=30, blank=False)
+    money = models.IntegerField(blank=False)
+    date = models.DateField(default=timezone.now)
+    user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, related_name='user')
+    setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='setup')
 
 class Notification(models.Model):
     text = models.CharField(max_length=255, blank=False)
     isRead = models.BooleanField(default=False)
-    createdAt = models.DateField()
-    updatedAt = models.DateField()
+    createdAt = models.DateField(default=timezone.now)
+    updatedAt = models.DateField(default=timezone.now)
     setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='setups')
     user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, related_name='userss')
 

@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 from rest_framework import routers
-from api.views import ContactApiView, ContactUsApiView, FeedbackApiView, FeedbackDetailsApiView, NotificationApiView, OccupySetupView, SetupApiView, SetupDetailsApiView, UserViewSet
+from api.views import ContactApiView, ContactUsApiView, FeedbackApiView, FeedbackDetailsApiView, NotificationApiView, NotificationDetailsApiView, OccupySetupView, SetupApiView, SetupDetailsApiView, TransactionsApiView, UserViewSet
 from django.urls import path, include
 
 router = routers.DefaultRouter()
@@ -21,5 +21,7 @@ urlpatterns = [
     path('occupy/<int:setup_id>/', OccupySetupView.as_view()),
     
     url(r'^notifications/', NotificationApiView.as_view()),
-    # path('notifications/<int:user_id>/', NotificationApiView.as_view()),
+    path('notifications/<int:notify_id>/', NotificationDetailsApiView.as_view()),
+
+    url(r'^transaction/', TransactionsApiView.as_view()),
 ]

@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
-from api.models import ContactUs, Feedback, Notification, Setup, User
-from api.serializers import ContactUsSerializer, NotificationSerializer, SetupSerializer, UserSerializer, UserFeedbackSerializer
+from api.models import ContactUs, Feedback, Notification, Setup, Transaction, User
+from api.serializers import ContactUsSerializer, NotificationSerializer, SetupSerializer, TransactionSerializer, UserSerializer, UserFeedbackSerializer
 from api.permissions import IsLoggedInUserOrAdmin, IsAdminUser
 from rest_framework.response import Response
 from rest_framework import status
@@ -389,3 +389,103 @@ class NotificationApiView(APIView):
         notify = Notification.objects.all()
         serializer = NotificationSerializer(notify, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+
+class NotificationDetailsApiView(APIView):
+    # add permission to check if user is authenticated
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, notify_id):
+        '''
+        Helper method to get the object with given setup id
+        '''
+        try:
+            return Notification.objects.get(id=notify_id)
+        except Notification.DoesNotExist:
+            return None
+
+    # 3. Retrieve
+    def get(self, notify_id, *args, **kwargs):
+        '''
+        Retrieves the Notification with given notify id
+        '''
+        notify_instance = self.get_object(notify_id)
+        if not notify_instance:
+            return Response(
+                {"res": "Notification with this id does not exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = NotificationSerializer(notify_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 4. Update
+    def put(self, request, notify_id, *args, **kwargs):
+        '''
+        Updates the Notification details with given notify id if exists
+        '''
+        notify_instance = self.get_object(notify_id)
+        if not notify_instance:
+            return Response(
+                {"res": "Notification with this id does not exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        data = {
+            'isRead': request.data.get('isRead')
+        }
+        serializer = NotificationSerializer(instance = notify_instance, data=data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # 5. Delete
+    def delete(self, notify_id, *args, **kwargs):
+        '''
+        Deletes Notification details with given id if exists
+        '''
+        notify_instance = self.get_object(notify_id)
+        if not notify_instance:
+            return Response(
+                {"res": "Notification with this id does not exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        notify_instance.delete()
+        return Response(
+            {"res": "Notification deleted!"},
+            status=status.HTTP_200_OK
+        )
+
+
+class TransactionsApiView(APIView):
+    # add permission to check if user is authenticated
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        '''
+        List all the Transactions data
+        '''
+        transaction = Transaction.objects.all()
+        serializer = TransactionSerializer(transaction, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 2. Create
+    def post(self, request, *args, **kwargs):
+        '''
+        Create Setup with given data
+        '''
+
+        data = {
+            'transaction': request.data.get('transaction_id'), 
+            'money': request.data.get('money'),
+            'setup': request.data.get('setup'), 
+            'user': request.user.id
+        }
+        serializer = TransactionSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
