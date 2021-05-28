@@ -53,7 +53,7 @@ class Setup(models.Model):
     fees = models.IntegerField()
     zip = models.CharField(max_length=7,blank=True)
     photo = models.CharField(blank=True,null=True,max_length=500)
-    isOccupied = models.BooleanField(default=False, blank=False)
+    isOccupied = models.BooleanField(default=False, blank=True)
     isCleaned = models.BooleanField(default=True, blank=True)
     createdBy = models.CharField(blank=True, max_length=4)
     updatedBy = models.CharField(blank=True, max_length=4)
