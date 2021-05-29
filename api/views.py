@@ -8,6 +8,7 @@ from rest_framework import status
 from rest_framework import permissions
 from rest_framework.views import APIView
 import datetime
+from django.core import serializers
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -485,8 +486,16 @@ class TransactionsApiView(APIView):
         }
         serializer = TransactionSerializer(data=data)
         if serializer.is_valid():
-            # print(serializer.data['setup'],'transaction')
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            print(serializer.data['setup'],'transaction')
+            # serializer.save()
+            data = Setup.objects.filter(id=serializer.data['setup'])
+            serialized_qs = serializers.serialize('json', data)
+            send = {
+                "data":serializer.data,
+                "setup":serialized_qs
+            }
+            # serialized_qs = serializers.serialize('json', send)
+            print(send, 'setup')
+            return Response(send, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

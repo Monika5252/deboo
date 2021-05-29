@@ -31,7 +31,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         instance.email = validated_data.get('email', instance.email)
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.password = 'welcome'
         instance.save()
 
         profile.name = profile_data.get('name', profile.name)
