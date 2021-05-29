@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
 from rest_framework.views import APIView
+import datetime
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -386,7 +387,7 @@ class NotificationApiView(APIView):
         '''
         List all the Notifications data
         '''
-        notify = Notification.objects.all()
+        notify = Notification.objects.filter(user=request.user.id)
         serializer = NotificationSerializer(notify, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -458,7 +459,6 @@ class NotificationDetailsApiView(APIView):
             status=status.HTTP_200_OK
         )
 
-
 class TransactionsApiView(APIView):
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
@@ -467,7 +467,7 @@ class TransactionsApiView(APIView):
         '''
         List all the Transactions data
         '''
-        transaction = Transaction.objects.all()
+        transaction = Transaction.objects.filter(user=request.user.id)
         serializer = TransactionSerializer(transaction, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -478,9 +478,9 @@ class TransactionsApiView(APIView):
         '''
 
         data = {
-            'transaction': request.data.get('transaction_id'), 
+            'transaction_id': request.data.get('transaction_id'),
             'money': request.data.get('money'),
-            'setup': request.data.get('setup'), 
+            'setup': request.data.get('setup'),
             'user': request.user.id
         }
         serializer = TransactionSerializer(data=data)
