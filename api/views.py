@@ -272,7 +272,7 @@ class SetupDetailsApiView(APIView):
             return None
 
     # 3. Retrieve
-    def get(self, setup_id, *args, **kwargs):
+    def get(self, request, setup_id):
         '''
         Retrieves the Contact us with given contact id
         '''
@@ -317,7 +317,7 @@ class SetupDetailsApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # 5. Delete
-    def delete(self, setup_id, *args, **kwargs):
+    def delete(self, request, setup_id, *args, **kwargs):
         '''
         Deletes Setup details with given setup id if exists
         '''
@@ -337,7 +337,7 @@ class OccupySetupView(APIView):
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self, setup_id):
+    def get_object(self, request, setup_id):
         '''
         Helper method to get the object with given setup id
         '''
@@ -399,7 +399,7 @@ class NotificationDetailsApiView(APIView):
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self, notify_id):
+    def get_object(self, request, notify_id):
         '''
         Helper method to get the object with given setup id
         '''
@@ -409,7 +409,7 @@ class NotificationDetailsApiView(APIView):
             return None
 
     # 3. Retrieve
-    def get(self, notify_id, *args, **kwargs):
+    def get(self, request, notify_id, *args, **kwargs):
         '''
         Retrieves the Notification with given notify id
         '''
@@ -486,16 +486,23 @@ class TransactionsApiView(APIView):
         }
         serializer = TransactionSerializer(data=data)
         if serializer.is_valid():
-            print(serializer.data['setup'],'transaction')
-            # serializer.save()
+            serializer.save()
+            
             data = Setup.objects.filter(id=serializer.data['setup'])
+
+            for i in data:
+                data.update(isOccupied=True)
+                data.update(occupiedBy=request.user.id)
+
             serialized_qs = serializers.serialize('json', data)
             send = {
                 "data":serializer.data,
-                "setup":serialized_qs
+                "setup": serialized_qs
             }
+            
             # serialized_qs = serializers.serialize('json', send)
-            print(send, 'setup')
-            return Response(send, status=status.HTTP_201_CREATED)
+            print(serializer.data, 'serializer data')
+            print(send, 'send data')
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
