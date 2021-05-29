@@ -13,10 +13,12 @@ class UserProfileInline(admin.StackedInline):
 class UserFeedbackInline(admin.ModelAdmin):
     model = Feedback
     can_delete = True
+    list_display = ('mobile', 'text', 'rate', 'user')
 
 class UserContactInline(admin.ModelAdmin):
     model = ContactUs
     can_delete = True
+    list_display = ('contact', 'mobile')
 
 class SetupInline(admin.ModelAdmin):
     model = Setup

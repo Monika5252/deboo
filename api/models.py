@@ -58,6 +58,7 @@ class Setup(models.Model):
     country = models.CharField(max_length=50,blank=True)
     city = models.CharField(max_length=50,blank=True)
     fees = models.IntegerField()
+    occupyTime = models.IntegerField(blank=True, null=True, default=10)
     zip = models.CharField(max_length=7,blank=True)
     photo = models.CharField(blank=True,null=True,max_length=500)
     isOccupied = models.BooleanField(default=False, blank=True)
@@ -84,6 +85,4 @@ class Notification(models.Model):
     updatedAt = models.DateField(default=datetime.date.today)
     setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='setups')
     user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, related_name='userss')
-
-
 
