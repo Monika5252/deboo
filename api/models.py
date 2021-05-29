@@ -23,7 +23,7 @@ class UserProfile(models.Model):
     age = models.CharField(max_length=20,blank=True)
     address = models.CharField(max_length=255,blank=True)
     country = models.CharField(max_length=50,blank=True)
-    gender = models.CharField(max_length=5,blank=True)
+    gender = models.CharField(max_length=8,blank=True)
     city = models.CharField(max_length=50,blank=True)
     zip = models.CharField(max_length=7,blank=True)
     photo = models.CharField(blank=True,max_length=500)
