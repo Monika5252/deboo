@@ -485,6 +485,7 @@ class TransactionsApiView(APIView):
         }
         serializer = TransactionSerializer(data=data)
         if serializer.is_valid():
+            # print(serializer.data['setup'],'transaction')
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
