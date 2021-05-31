@@ -345,7 +345,7 @@ class OccupySetupView(APIView):
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self, request, setup_id):
+    def get_object(self, setup_id):
         '''
         Helper method to get the object with given setup id
         '''
@@ -367,7 +367,7 @@ class OccupySetupView(APIView):
             )
         data = {
             'isOccupied': request.data.get('isOccupied'),
-            'occupiedBy': request.user.id
+            'occupiedBy': ''
         }
         serializer = SetupSerializer(instance = setup_instance, data=data, partial = True)
         if serializer.is_valid():
@@ -399,8 +399,6 @@ class NotificationApiView(APIView):
         notify = Notification.objects.filter(user=request.user.id)
         serializer = NotificationSerializer(notify, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
 
 
 class NotificationDetailsApiView(APIView):
@@ -483,12 +481,13 @@ class TransactionsApiView(APIView):
     # 2. Create
     def post(self, request, *args, **kwargs):
         '''
-        Create Setup with given data
+        Create Transaction with given data
         '''
 
         data = {
             'transaction_id': request.data.get('transaction_id'),
             'money': request.data.get('money'),
+            'mobile': request.data.get('mobile'),
             'setup': request.data.get('setup'),
             'user': request.user.id
         }
