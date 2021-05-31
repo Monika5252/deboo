@@ -72,6 +72,7 @@ class Setup(models.Model):
 class Transaction(models.Model):
     transaction_id = models.CharField(max_length=30, blank=False)
     money = models.IntegerField(blank=False)
+    mobile = models.IntegerField(blank=False)
     date = models.DateField(default=datetime.date.today)
     user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, related_name='user')
     setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='setup')
