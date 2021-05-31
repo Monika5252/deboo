@@ -513,3 +513,28 @@ class TransactionsApiView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class NearMeApiView(APIView):
+    # add permission to check if user is authenticated
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        '''
+        List all the near by setups data
+        '''
+        data = []
+        allSetup = Setup.objects.all()
+        # print(allSetup)
+        for i in allSetup:
+            data.append(
+                {
+                'id':i.id,
+                'name':i.name,
+                'longitude':i.longitude,
+                'latitude':i.latitude
+            })
+        # print(data, 'dict')
+            # print(i.latitude, 'latitude')
+        # serializer = NotificationSerializer(allSetup, many=True)
+        # if serializer
+        return Response(data, status=status.HTTP_200_OK)
