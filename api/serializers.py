@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import ContactUs, Feedback, Notification, Setup, Transaction, User, UserProfile
+from api.models import ContactUs, Feedback, Notification, Setup, Transaction, User, UserProfile, Wallet
 
 class UserProfileSerializer(serializers.ModelSerializer):
     
@@ -69,4 +69,9 @@ class TransactionSerializer(serializers.ModelSerializer):
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
+        fields = ('__all__')
+
+class WalletSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wallet
         fields = ('__all__')

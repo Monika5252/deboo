@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 from rest_framework import routers
-from api.views import ContactApiView, ContactUsApiView, FeedbackApiView, FeedbackDetailsApiView, NearMeApiView, NotificationApiView, NotificationDetailsApiView, OccupySetupView, SetupApiView, SetupDetailsApiView, TransactionsApiView, UserViewSet
+from api.views import ContactApiView, ContactUsApiView, FeedbackApiView, FeedbackDetailsApiView, NearMeApiView, NotificationApiView, NotificationDetailsApiView, OccupySetupView, SetupApiView, SetupDetailsApiView, TransactionsApiView, UserViewSet, WalletApiView, WalletDetailsApiView
 from django.urls import path, include
 
 router = routers.DefaultRouter()
@@ -25,5 +25,9 @@ urlpatterns = [
 
     url(r'^transaction/', TransactionsApiView.as_view()),
 
-    url(r'^nearme/', NearMeApiView.as_view())
+    url(r'^nearme/', NearMeApiView.as_view()),
+
+    url(r'^wallet/', WalletApiView.as_view()),
+    path('walletmoney/<int:wallet_id>/', WalletDetailsApiView.as_view()),
+
 ]

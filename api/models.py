@@ -87,3 +87,6 @@ class Notification(models.Model):
     setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='setups')
     user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, related_name='userss')
 
+class Wallet(models.Model):
+       user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True)
+       balance = models.IntegerField(default = 0)

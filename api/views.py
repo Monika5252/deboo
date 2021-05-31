@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
-from api.models import ContactUs, Feedback, Notification, Setup, Transaction, User
-from api.serializers import ContactUsSerializer, NotificationSerializer, SetupSerializer, TransactionSerializer, UserSerializer, UserFeedbackSerializer
+from api.models import ContactUs, Feedback, Notification, Setup, Transaction, User, Wallet
+from api.serializers import ContactUsSerializer, NotificationSerializer, SetupSerializer, TransactionSerializer, UserSerializer, UserFeedbackSerializer, WalletSerializer
 from api.permissions import IsLoggedInUserOrAdmin, IsAdminUser
 from rest_framework.response import Response
 from rest_framework import status
@@ -494,7 +494,7 @@ class TransactionsApiView(APIView):
         serializer = TransactionSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            
+
             data = Setup.objects.filter(id=serializer.data['setup'])
 
             for i in data:
@@ -538,3 +538,105 @@ class NearMeApiView(APIView):
         # serializer = NotificationSerializer(allSetup, many=True)
         # if serializer
         return Response(data, status=status.HTTP_200_OK)
+
+class WalletApiView(APIView):
+    # add permission to check if user is authenticated
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        '''
+        List User Wallet
+        '''
+        balance = Wallet.objects.filter(user=request.user.id)
+        serializer = WalletSerializer(balance, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 2. Create
+    def post(self, request, *args, **kwargs):
+        '''
+        Create Wallet with given data
+        '''
+        data = {
+            'balance': request.data.get('balance'), 
+            'user': request.user.id
+        }
+        serializer = WalletSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class WalletDetailsApiView(APIView):
+    # add permission to check if user is authenticated
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, wallet_id):
+        '''
+        Helper method to get the object with given wallet id
+        '''
+        try:
+            return Wallet.objects.get(id=wallet_id)
+        except Wallet.DoesNotExist:
+            return None
+
+    # 3. Retrieve
+    def get(self, request, wallet_id, *args, **kwargs):
+        '''
+        Retrieves the Wallet with given wallet id
+        '''
+        wallet_instance = self.get_object(wallet_id)
+        if not wallet_instance:
+            return Response(
+                {"res": "Wallet with this id does not exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = WalletSerializer(wallet_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 4. Update
+    def put(self, request, wallet_id, *args, **kwargs):
+        '''
+        Updates the Wallet balance with given wallet id if exists
+        '''
+        wallet_instance = self.get_object(wallet_id)
+        print(wallet_instance, 'wallet instance')
+        if not wallet_instance:
+            return Response(
+                {"res": "Wallet with this id does not exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        data = {
+            'balance': request.data.get('balance')
+        }
+        serializer = WalletSerializer(instance = wallet_instance, data=data, partial = True)
+        if serializer.is_valid():
+            # serializer.save()
+            data = Wallet.objects.filter(id=serializer.data['id'])
+            print(int(request.data.get('balance')), 'requested balance')
+            print(int(serializer.data['balance']), 'serialized balance')
+            plus = int(request.data.get('balance')) + int(serializer.data['balance'])
+            print(plus, 'added value')
+            for i in data:
+                data.update(balance=int(request.data.get('balance'))+int(serializer.data['balance']))
+            serialized_qs = serializers.serialize('json', data)
+            return Response(serialized_qs, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # 5. Delete
+    def delete(self, notify_id, *args, **kwargs):
+        '''
+        Deletes Wallet details with given id if exists
+        '''
+        wallet_instance = self.get_object(notify_id)
+        if not wallet_instance:
+            return Response(
+                {"res": "Wallet with this id does not exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        wallet_instance.delete()
+        return Response(
+            {"res": "Wallet deleted!"},
+            status=status.HTTP_200_OK
+        )
