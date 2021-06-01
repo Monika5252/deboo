@@ -372,18 +372,7 @@ class OccupySetupView(APIView):
         serializer = SetupSerializer(instance = setup_instance, data=data, partial = True)
         if serializer.is_valid():
             serializer.save()
-            print(serializer.data, 'saved data')
-            # note = {
-            # 'text': 'this is test notification', 
-            # 'isRead': 'False',
-            # 'setup': '1',
-            # 'user': request.user.id,
-            # }
-            # print(note, 'notification data')
-            # serializer_notification = NotificationSerializer(data=note)
-            # if serializer_notification.is_valid():
-            #     serializer_notification.save()
-            #     print(serializer_notification, 'notify')
+            ReleaseNotification(request.user.id, serializer.data['id'])
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -492,24 +481,20 @@ class TransactionsApiView(APIView):
             'user': request.user.id
         }
         
-        
         # wallet_money = request.data.get('walletMoney')
         wallet_id = request.data.get('w_id')
         # print(wallet_money)
-        print(wallet_id)
 
         serializer = TransactionSerializer(data=data)
 
         if serializer.is_valid():
             serializer.save()
-            
+            BookNotification(request.user.id, request.data.get('setup'))
             get_wallet = Wallet.objects.filter(id=request.data.get('w_id'))
-            print(get_wallet, 'get wallet filter')
+            
             wallet_serializer = WalletSerializer(get_wallet, many=True)
-            print(wallet_serializer.data, 'serializer')
+           
             for i in get_wallet:
-                print(i.balance)
-                print(request.data.get('money'))
                 get_wallet.update(balance=i.balance-int(request.data.get('money')))
 
             data = Setup.objects.filter(id=serializer.data['setup'])
@@ -525,8 +510,7 @@ class TransactionsApiView(APIView):
             }
             
             # serialized_qs = serializers.serialize('json', send)
-            print(serializer.data, 'serializer data')
-            print(send, 'send data')
+            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -618,7 +602,7 @@ class WalletDetailsApiView(APIView):
         Updates the Wallet balance with given wallet id if exists
         '''
         wallet_instance = self.get_object(wallet_id)
-        print(wallet_instance, 'wallet instance')
+        
         if not wallet_instance:
             return Response(
                 {"res": "Wallet with this id does not exists"}, 
@@ -631,10 +615,9 @@ class WalletDetailsApiView(APIView):
         if serializer.is_valid():
             # serializer.save()
             data = Wallet.objects.filter(id=serializer.data['id'])
-            print(int(request.data.get('balance')), 'requested balance')
-            print(int(serializer.data['balance']), 'serialized balance')
+
             plus = int(request.data.get('balance')) + int(serializer.data['balance'])
-            print(plus, 'added value')
+            
             for i in data:
                 data.update(balance=int(request.data.get('balance'))+int(serializer.data['balance']))
             serialized_qs = serializers.serialize('json', data)
@@ -657,3 +640,29 @@ class WalletDetailsApiView(APIView):
             {"res": "Wallet deleted!"},
             status=status.HTTP_200_OK
         )
+
+
+def BookNotification(user, setup):
+    note = {
+    'text': 'this is test notification function', 
+    'isRead': 'False',
+    'setup': setup,
+    'user': user,
+    }
+
+    serializer_notification = NotificationSerializer(data=note)
+    if serializer_notification.is_valid():
+        serializer_notification.save()
+    return True
+
+def ReleaseNotification(user, setup):
+    note = {
+    'text': 'Thank you for using our service. on ' + setup + 'this setup.', 
+    'isRead': 'False',
+    'setup': setup,
+    'user': user,
+    }
+    serializer_notification = NotificationSerializer(data=note)
+    if serializer_notification.is_valid():
+        serializer_notification.save()
+    return True
