@@ -644,7 +644,7 @@ class WalletDetailsApiView(APIView):
 
 def BookNotification(user, setup):
     note = {
-    'text': 'this is test notification function', 
+    'text': 'You have booked' + setup + 'this setup.',
     'isRead': 'False',
     'setup': setup,
     'user': user,
