@@ -491,9 +491,26 @@ class TransactionsApiView(APIView):
             'setup': request.data.get('setup'),
             'user': request.user.id
         }
+        
+        
+        # wallet_money = request.data.get('walletMoney')
+        wallet_id = request.data.get('w_id')
+        # print(wallet_money)
+        print(wallet_id)
+
         serializer = TransactionSerializer(data=data)
+
         if serializer.is_valid():
             serializer.save()
+            
+            get_wallet = Wallet.objects.filter(id=request.data.get('w_id'))
+            print(get_wallet, 'get wallet filter')
+            wallet_serializer = WalletSerializer(get_wallet, many=True)
+            print(wallet_serializer.data, 'serializer')
+            for i in get_wallet:
+                print(i.balance)
+                print(request.data.get('money'))
+                get_wallet.update(balance=i.balance-int(request.data.get('money')))
 
             data = Setup.objects.filter(id=serializer.data['setup'])
 
