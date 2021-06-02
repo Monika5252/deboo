@@ -511,7 +511,7 @@ class TransactionsApiView(APIView):
             
             # serialized_qs = serializers.serialize('json', send)
             
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(send, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
