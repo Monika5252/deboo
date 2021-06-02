@@ -5,7 +5,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = UserProfile
-        fields = ('id', 'name', 'fcm_token', 'birthdate', 'age', 'address', 'country', 'gender', 'city', 'zip', 'photo')
+        fields = ('id', 'name', 'birthdate', 'age', 'address', 'country', 'gender', 'city', 'zip', 'photo')
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     profile = UserProfileSerializer(required=True)
@@ -34,7 +34,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         instance.save()
 
         profile.name = profile_data.get('name', profile.name)
-        profile.fcm_token = profile_data.get('fcm_token', profile.fcm_token)
         profile.birthdate = profile_data.get('birthdate', profile.birthdate)
         profile.age = profile_data.get('age', profile.age)
         profile.gender = profile_data.get('gender', profile.gender)
