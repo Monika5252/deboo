@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
-from api.models import ContactUs, Feedback, Notification, Setup, Transaction, User, Wallet
+from api.models import ContactUs, Feedback, Notification, Setup, Transaction, User, UserProfile, Wallet
 from api.serializers import ContactUsSerializer, NotificationSerializer, SetupSerializer, TransactionSerializer, UserSerializer, UserFeedbackSerializer, WalletSerializer
 from api.permissions import IsLoggedInUserOrAdmin, IsAdminUser
 from rest_framework.response import Response
@@ -9,6 +9,7 @@ from rest_framework import permissions
 from rest_framework.views import APIView
 import datetime
 from django.core import serializers
+from fcm_django.models import FCMDevice
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -140,6 +141,7 @@ class ContactApiView(APIView):
         '''
         List all the Contact Us data
         '''
+        PushNotify(request.user.id)
         contact = ContactUs.objects.all()
         serializer = ContactUsSerializer(contact, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -372,6 +374,7 @@ class OccupySetupView(APIView):
         serializer = SetupSerializer(instance = setup_instance, data=data, partial = True)
         if serializer.is_valid():
             serializer.save()
+            PushNotifyRelease(request.user.id)
             ReleaseNotification(request.user.id, serializer.data['id'])
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -489,6 +492,7 @@ class TransactionsApiView(APIView):
 
         if serializer.is_valid():
             serializer.save()
+            PushNotifyBook(request.user.id)
             BookNotification(request.user.id, request.data.get('setup'))
             get_wallet = Wallet.objects.filter(id=request.data.get('w_id'))
             
@@ -666,3 +670,16 @@ def ReleaseNotification(user, setup):
     if serializer_notification.is_valid():
         serializer_notification.save()
     return True
+
+def PushNotifyBook(uid):
+    user = User.objects.filter(id=uid)
+    for i in user:
+        i.profile.fcm_token.send_message(message={"title" : "Deboo", "body" : "you have booked a service"}, extra={"foo": "bar"})
+    return True
+
+def PushNotifyRelease(uid):
+    user = User.objects.filter(id=uid)
+    for i in user:
+        i.profile.fcm_token.send_message(message={"title" : "Deboo", "body" : "Thank you for using our service"}, extra={"foo": "bar"})
+    return True
+ 

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'corsheaders',
+    'fcm_django'
 ]
 
 MIDDLEWARE = [
@@ -59,6 +60,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+FCM_DJANGO_SETTINGS = {
+        "FCM_SERVER_KEY": "AAAApoGEW5I:APA91bHCgiPjvvZRvmbLqlT0p178f9RmdxkrHA6yMZc7vp0G3vvjdUuND78lwn3DNUfLvxmVCj50vSzGDcyBm8rnic5y5usJau8_Ys2FoWL2WIqs-Pq5KTnmtIFsQWEymd-UbesWShT0"
+}
 
 CORS_ORIGIN_ALLOW_ALL = True
 
