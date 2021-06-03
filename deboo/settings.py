@@ -160,7 +160,7 @@ REST_USE_JWT = True
 
 django_heroku.settings(locals())
 
-SIMPLE_JWT = {
+JWT_AUTH = {
 'ACCESS_TOKEN_LIFETIME': timedelta(days=10),
 'REFRESH_TOKEN_LIFETIME': timedelta(days=20),
 'ROTATE_REFRESH_TOKENS': False,
