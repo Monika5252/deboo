@@ -672,14 +672,34 @@ def ReleaseNotification(user, setup):
     return True
 
 def PushNotifyBook(uid):
-    user = User.objects.filter(id=uid)
-    for i in user:
-        i.profile.fcm_token.send_message(message={"title" : "Deboo", "body" : "you have booked a service"}, extra={"foo": "bar"})
+    user_data = User.objects.filter(id=uid)
+    device = FCMDevice()
+    for i in user_data:
+        device.registration_id = i.profile.fcm_token
+    device.name = "Deboo Android"
+    device.save()
+    device.send_message(
+        title="Deboo", 
+        body="you have booked a service",
+        data={
+            "notification type" : 20
+        })
+    print(device)
     return True
 
 def PushNotifyRelease(uid):
-    user = User.objects.filter(id=uid)
-    for i in user:
-        i.profile.fcm_token.send_message(message={"title" : "Deboo", "body" : "Thank you for using our service"}, extra={"foo": "bar"})
+    user_data = User.objects.filter(id=uid)
+    device = FCMDevice()
+    for i in user_data:
+        device.registration_id = i.profile.fcm_token
+    device.name = "Deboo Android"
+    device.save()
+    device.send_message(
+        title="Deboo", 
+        body="Thank you for using our service",
+        data={
+            "notification type" : 20
+        })
+    print(device)
     return True
  
