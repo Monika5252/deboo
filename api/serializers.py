@@ -1,5 +1,27 @@
+from django.db import models
 from rest_framework import serializers
 from api.models import ContactUs, Feedback, Notification, Setup, Transaction, User, UserProfile, Wallet
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+
+class TestUserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ('id', 'name','fcm_token', 'birthdate', 'age', 'address', 'country', 'gender', 'city', 'zip', 'photo')
+
+class TestUserSerializer(serializers.ModelSerializer):
+    model = User
+    fields = fields = ('url', 'mobile', 'email', 'first_name', 'last_name', 'password', 'profile')
+    extra_kwargs = {'password': {'write_only': True}}
+    
+    def create(self, validated_data):
+        profile_data = validated_data.pop('profile')
+        password = validated_data.pop('password')
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
+        UserProfile.objects.create(user=user, **profile_data)
+        return user
 
 class UserProfileSerializer(serializers.ModelSerializer):
     
@@ -22,7 +44,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         user.set_password(password)
         user.save()
         UserProfile.objects.create(user=user, **profile_data)
-        return  user
+        return user
 
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('profile')

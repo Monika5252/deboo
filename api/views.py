@@ -10,6 +10,26 @@ from rest_framework.views import APIView
 import datetime
 from django.core import serializers
 from fcm_django.models import FCMDevice
+from rest_framework.authtoken.models import Token
+
+
+class UserCreate(APIView):
+    """ 
+    Creates the user. 
+    """
+
+    def post(self, request, format='json'):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            if user:
+                token = Token.objects.create(user=user)
+                json = serializer.data
+                json['token'] = token.key
+                return Response(json, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -141,7 +161,6 @@ class ContactApiView(APIView):
         '''
         List all the Contact Us data
         '''
-        PushNotify(request.user.id)
         contact = ContactUs.objects.all()
         serializer = ContactUsSerializer(contact, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -356,7 +375,6 @@ class OccupySetupView(APIView):
         except Setup.DoesNotExist:
             return None
 
-
     def put(self, request, setup_id, *args, **kwargs):
         '''
         Updates the setup details with given setup id if exists
@@ -379,7 +397,6 @@ class OccupySetupView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class NotificationApiView(APIView):
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
@@ -391,7 +408,6 @@ class NotificationApiView(APIView):
         notify = Notification.objects.filter(user=request.user.id)
         serializer = NotificationSerializer(notify, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 class NotificationDetailsApiView(APIView):
     # add permission to check if user is authenticated
