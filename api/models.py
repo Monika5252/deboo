@@ -67,7 +67,7 @@ class Setup(models.Model):
     occupiedBy = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, null = True, related_name='users')
     createdAt = models.DateField(default=datetime.date.today)
     updatedAt = models.DateField(default=datetime.date.today)
-    staff = models.IntegerField()
+    staff = models.IntegerField(blank=True, null=True)
 
 class Transaction(models.Model):
     transaction_id = models.CharField(max_length=30, blank=False)

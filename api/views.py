@@ -773,3 +773,77 @@ class GetStaffApiView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class StaffDetailsApiView(APIView):
+    # add permission to check if user is authenticated
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, request, staff_id):
+        '''
+        Helper method to get the object with given staff id
+        '''
+        try:
+            return StaffProfile.objects.get(id=staff_id)
+        except StaffProfile.DoesNotExist:
+            return None
+
+    # 3. Retrieve
+    def get(self, request, staff_id, *args, **kwargs):
+        '''
+        Retrieves the Staff Profile with given staff id
+        '''
+        staff_instance = self.get_object(staff_id)
+        if not staff_instance:
+            return Response(
+                {"res": "Staff with this id does not exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = StaffSerializer(staff_id)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 4. Update
+    def put(self, request, staff_id, *args, **kwargs):
+        '''
+        Updates the Staff Profile details with given staff id if exists
+        '''
+        staff_instance = self.get_object(staff_id)
+        if not staff_instance:
+            return Response(
+                {"res": "Staff with this id does not exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        data = {
+            'name': request.data.get('name'), 
+            'address': request.data.get('address'),
+            'mobile': request.data.get('mobile'), 
+            'zip': request.data.get('zip'), 
+            'photo': request.data.get('photo'),
+            'adhaar': request.data.get('adhaar'),
+            'age': request.data.get('age'), 
+            'gender': request.data.get('gender'),
+            'city': request.data.get('city'),
+            'setup': request.data.get('setup_id')
+        }
+        serializer = StaffSerializer(instance = staff_instance, data=data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # 5. Delete
+    def delete(self, staff_id, *args, **kwargs):
+        '''
+        Deletes Staff profile details with given id if exists
+        '''
+        staff_instance = self.get_object(staff_id)
+        if not staff_instance:
+            return Response(
+                {"res": "Staff profile with this id does not exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        staff_instance.delete()
+        return Response(
+            {"res": "Staff Profile deleted!"},
+            status=status.HTTP_200_OK
+        )
