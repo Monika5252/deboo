@@ -1,6 +1,6 @@
 from django.db import models
 from rest_framework import serializers
-from api.models import ContactUs, Feedback, Notification, Setup, Transaction, User, UserProfile, Wallet
+from api.models import ContactUs, Feedback, Notification, Setup, StaffProfile, Transaction, User, UserProfile, Wallet
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
@@ -97,3 +97,8 @@ class WalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wallet
         fields = ('__all__')
+
+class StaffSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StaffProfile
+        fields = fields = ('id', 'name','mobile', 'adhaar', 'setup', 'age', 'address', 'gender', 'city', 'zip', 'photo')

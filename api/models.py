@@ -29,7 +29,6 @@ class UserProfile(models.Model):
     zip = models.CharField(max_length=7,blank=True)
     photo = models.CharField(blank=True,max_length=500)
 
-
 class Feedback(models.Model):
     mobile = models.CharField(max_length=15, blank=False)
     rate = models.CharField(max_length=5,blank=True)
@@ -50,7 +49,6 @@ class ContactUs(models.Model):
     def __str__(self):
         return "{}".format(self.contact)
 
-
 class Setup(models.Model):
     name = models.CharField(max_length=30, blank=False)
     address = models.CharField(max_length=255, blank=False)
@@ -69,6 +67,7 @@ class Setup(models.Model):
     occupiedBy = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, null = True, related_name='users')
     createdAt = models.DateField(default=datetime.date.today)
     updatedAt = models.DateField(default=datetime.date.today)
+    staff = models.IntegerField()
 
 class Transaction(models.Model):
     transaction_id = models.CharField(max_length=30, blank=False)
@@ -91,3 +90,15 @@ class Notification(models.Model):
 class Wallet(models.Model):
        user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True)
        balance = models.IntegerField(default = 0)
+
+class StaffProfile(models.Model):
+    name = models.CharField(max_length=55,blank=True)
+    mobile = models.CharField(max_length=255,blank=True)
+    adhaar = models.CharField(max_length=20,blank=True)
+    age = models.CharField(max_length=20,blank=True)
+    address = models.CharField(max_length=255,blank=True)
+    gender = models.CharField(max_length=8,blank=True)
+    city = models.CharField(max_length=50,blank=True)
+    zip = models.CharField(max_length=7,blank=True)
+    photo = models.CharField(blank=True,max_length=500)
+    setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='set')

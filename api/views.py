@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
-from api.models import ContactUs, Feedback, Notification, Setup, Transaction, User, UserProfile, Wallet
-from api.serializers import ContactUsSerializer, NotificationSerializer, SetupSerializer, TransactionSerializer, UserSerializer, UserFeedbackSerializer, WalletSerializer
+from api.models import ContactUs, Feedback, Notification, Setup, StaffProfile, Transaction, User, UserProfile, Wallet
+from api.serializers import ContactUsSerializer, NotificationSerializer, SetupSerializer, StaffSerializer, TransactionSerializer, UserSerializer, UserFeedbackSerializer, WalletSerializer
 from api.permissions import IsLoggedInUserOrAdmin, IsAdminUser
 from rest_framework.response import Response
 from rest_framework import status
@@ -695,7 +695,7 @@ def PushNotifyBook(uid):
     device.name = "Deboo Android"
     device.save()
     device.send_message(
-        title="Deboo", 
+        title="Deboo",
         body="you have booked a service",
         data={
             "notification type" : 20
@@ -711,7 +711,7 @@ def PushNotifyRelease(uid):
     device.name = "Deboo Android"
     device.save()
     device.send_message(
-        title="Deboo", 
+        title="Deboo",
         body="Thank you for using our service",
         data={
             "notification type" : 20
@@ -719,3 +719,57 @@ def PushNotifyRelease(uid):
     print(device)
     return True
  
+class AllTransactionApiView(APIView):
+    # add permission to check if user is authenticated
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        '''
+        List All Transactions
+        '''
+        transaction = Transaction.objects.all()
+        serializer = TransactionSerializer(transaction, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class GetStaffApiView(APIView):
+    # add permission to check if user is authenticated
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        '''
+        List All Staff
+        '''
+        staff = StaffProfile.objects.all()
+        serializer = StaffSerializer(staff, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 2. Create
+    def post(self, request, *args, **kwargs):
+        '''
+        Create Staff with given data
+        '''
+
+        data = {
+            'name': request.data.get('name'), 
+            'address': request.data.get('address'),
+            'mobile': request.data.get('mobile'), 
+            'zip': request.data.get('zip'), 
+            'photo': request.data.get('photo'),
+            'adhaar': request.data.get('adhaar'),
+            'age': request.data.get('age'), 
+            'gender': request.data.get('gender'),
+            'city': request.data.get('city'),
+            'setup': request.data.get('setup_id')
+        }
+        serializer = StaffSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            print(serializer.data)
+            data = Setup.objects.filter(id=request.data.get('setup_id'))
+
+            for i in data:
+                print(i)
+                data.update(staff=serializer.data['id'])
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
