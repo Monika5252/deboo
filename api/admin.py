@@ -38,7 +38,7 @@ class TransactionInline(admin.ModelAdmin):
 class WalletInline(admin.ModelAdmin):
     model = Wallet
     can_delete = True
-    list_display = ('user', 'balance')
+    list_display = ('user', 'balance', 'createdAt', 'updatedAt')
 
 class StaffInline(admin.ModelAdmin):
     model = StaffProfile

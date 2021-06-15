@@ -34,8 +34,8 @@ class Feedback(models.Model):
     rate = models.CharField(max_length=5,blank=True)
     text = models.CharField(max_length=255,blank=True)
     user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, null = True)
-    createdAt = models.DateField(default=datetime.date.today)
-    updatedAt = models.DateField(default=datetime.date.today)
+    createdAt = models.DateField(auto_now_add=True)
+    updatedAt = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return "{}".format(self.mobile)
@@ -43,8 +43,8 @@ class Feedback(models.Model):
 class ContactUs(models.Model):
     contact = models.CharField(max_length=30, blank=False)
     mobile = models.CharField(max_length=15,blank=True)
-    createdAt = models.DateField(default=datetime.date.today)
-    updatedAt = models.DateField(default=datetime.date.today)
+    createdAt = models.DateField(auto_now_add=True)
+    updatedAt = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return "{}".format(self.contact)
@@ -65,8 +65,8 @@ class Setup(models.Model):
     createdBy = models.CharField(blank=True, max_length=4)
     updatedBy = models.CharField(blank=True, max_length=4)
     occupiedBy = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, null = True, related_name='users')
-    createdAt = models.DateField(default=datetime.date.today)
-    updatedAt = models.DateField(default=datetime.date.today)
+    createdAt = models.DateField(auto_now_add=True)
+    updatedAt = models.DateField(auto_now_add=True)
     staff = models.IntegerField(blank=True, null=True)
 
 class Transaction(models.Model):
@@ -76,20 +76,22 @@ class Transaction(models.Model):
     date = models.DateField(default=datetime.date.today)
     user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, related_name='user')
     setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='setup')
-    createdAt = models.DateField(default=datetime.date.today)
-    updatedAt = models.DateField(default=datetime.date.today)
+    createdAt = models.DateField(auto_now_add=True)
+    updatedAt = models.DateField(auto_now_add=True)
 
 class Notification(models.Model):
     text = models.CharField(max_length=255, blank=False)
     isRead = models.BooleanField(default=False)
-    createdAt = models.DateField(default=datetime.date.today)
-    updatedAt = models.DateField(default=datetime.date.today)
+    createdAt = models.DateField(auto_now_add=True)
+    updatedAt = models.DateField(auto_now_add=True)
     setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='setups')
     user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, related_name='userss')
 
 class Wallet(models.Model):
        user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True)
        balance = models.IntegerField(default = 0)
+       createdAt = models.DateField(auto_now_add=True)
+       updatedAt = models.DateField(auto_now_add=True)
 
 class StaffProfile(models.Model):
     name = models.CharField(max_length=55,blank=True)
