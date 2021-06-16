@@ -1,35 +1,92 @@
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from api.models import ContactUs, Feedback, Notification, Setup, StaffProfile, Transaction, User, UserProfile, Wallet
 from api.serializers import ContactUsSerializer, NotificationSerializer, SetupSerializer, StaffSerializer, TransactionSerializer, UserSerializer, UserFeedbackSerializer, WalletSerializer
-from api.permissions import IsLoggedInUserOrAdmin, IsAdminUser
+
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework import permissions
+
 from rest_framework.views import APIView
-import datetime
 from django.core import serializers
 from fcm_django.models import FCMDevice
 from rest_framework.authtoken.models import Token
+from django.contrib.auth import get_user_model
+from rest_framework.decorators import api_view, permission_classes
+from django.views.decorators.csrf import ensure_csrf_cookie
+from api.utils import generate_access_token, generate_refresh_token
+from rest_framework import exceptions
+import jwt
+from django.conf import settings
+
+from django.views.decorators.csrf import csrf_protect
+from rest_framework import exceptions
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+@csrf_protect
+def refresh_token_view(request):
+    '''
+    To obtain a new access_token this view expects 2 important things:
+        1. a cookie that contains a valid refresh_token
+        2. a header 'X-CSRFTOKEN' with a valid csrf token, client app can get it from cookies "csrftoken"
+    '''
+    User = get_user_model()
+    refresh_token = request.COOKIES.get('refreshtoken')
+    if refresh_token is None:
+        raise exceptions.AuthenticationFailed(
+            'Authentication credentials were not provided.')
+    try:
+        payload = jwt.decode(
+            refresh_token, settings.REFRESH_TOKEN_SECRET, algorithms=['HS256'])
+    except jwt.ExpiredSignatureError:
+        raise exceptions.AuthenticationFailed(
+            'expired refresh token, please login again.')
+
+    user = User.objects.filter(id=payload.get('user_id')).first()
+    if user is None:
+        raise exceptions.AuthenticationFailed('User not found')
+
+    if not user.is_active:
+        raise exceptions.AuthenticationFailed('user is inactive')
 
 
-class UserCreate(APIView):
-    """ 
-    Creates the user. 
-    """
+    access_token = generate_access_token(user)
+    return Response({'access_token': access_token})
 
-    def post(self, request, format='json'):
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            if user:
-                token = Token.objects.create(user=user)
-                json = serializer.data
-                json['token'] = token.key
-                return Response(json, status=status.HTTP_201_CREATED)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['POST'])
+@permission_classes([AllowAny])
+@ensure_csrf_cookie
+def login_view(request):
+    User = get_user_model()
+    mobile = request.data.get('mobile')
+    password = request.data.get('password')
+    response = Response()
+    if (mobile is None) or (password is None):
+        raise exceptions.AuthenticationFailed(
+            'credentials required')
 
+    user = User.objects.filter(mobile=mobile).first()
+    if(user is None):
+        
+        raise exceptions.AuthenticationFailed('user not found')
+    if (not user.check_password(password)):
+        raise exceptions.AuthenticationFailed('wrong password')
+
+    serialized_user = UserSerializer(user,context={'request': request}).data
+    print(serialized_user)
+
+    access_token = generate_access_token(user)
+    refresh_token = generate_refresh_token(user)
+
+    response.set_cookie(key='refreshtoken', value=refresh_token, httponly=True)
+    response.data = {
+        'token': access_token,
+        'user_id':serialized_user['profile']['id'],
+        'user': serialized_user
+    }
+
+    return response
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -55,6 +112,7 @@ class UserViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 class FeedbackApiView(APIView):
+    permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -85,6 +143,7 @@ class FeedbackApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class FeedbackDetailsApiView(APIView):
+    permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -154,6 +213,7 @@ class FeedbackDetailsApiView(APIView):
 
 
 class ContactApiView(APIView):
+    permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -182,6 +242,7 @@ class ContactApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ContactUsApiView(APIView):
+    permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -249,6 +310,7 @@ class ContactUsApiView(APIView):
 
 
 class SetupApiView(APIView):
+    permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -288,6 +350,7 @@ class SetupApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SetupDetailsApiView(APIView):
+    permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -363,6 +426,7 @@ class SetupDetailsApiView(APIView):
         )
 
 class OccupySetupView(APIView):
+    permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -398,6 +462,7 @@ class OccupySetupView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class NotificationApiView(APIView):
+    permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -410,6 +475,7 @@ class NotificationApiView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class NotificationDetailsApiView(APIView):
+    permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -475,6 +541,7 @@ class NotificationDetailsApiView(APIView):
         )
 
 class TransactionsApiView(APIView):
+    permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -536,6 +603,7 @@ class TransactionsApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class NearMeApiView(APIView):
+    permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -561,6 +629,7 @@ class NearMeApiView(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 class WalletApiView(APIView):
+    permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -583,12 +652,16 @@ class WalletApiView(APIView):
         }
         serializer = WalletSerializer(data=data)
         if serializer.is_valid():
+            userData = UserProfile.objects.filter(id=request.user.id)
+            for d in userData:
+                userData.update(isWallet=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class WalletDetailsApiView(APIView):
+    permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -640,6 +713,7 @@ class WalletDetailsApiView(APIView):
             
             for i in data:
                 data.update(balance=int(request.data.get('balance'))+int(serializer.data['balance']))
+            
             serialized_qs = serializers.serialize('json', data)
             return Response(serialized_qs, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -652,7 +726,7 @@ class WalletDetailsApiView(APIView):
         wallet_instance = self.get_object(notify_id)
         if not wallet_instance:
             return Response(
-                {"res": "Wallet with this id does not exists"}, 
+                {"res": "Wallet with this id does not exists"},
                 status=status.HTTP_400_BAD_REQUEST
             )
         wallet_instance.delete()
@@ -660,7 +734,6 @@ class WalletDetailsApiView(APIView):
             {"res": "Wallet deleted!"},
             status=status.HTTP_200_OK
         )
-
 
 def BookNotification(user, setup):
     note = {
@@ -720,6 +793,7 @@ def PushNotifyRelease(uid):
     return True
  
 class AllTransactionApiView(APIView):
+    permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -732,6 +806,7 @@ class AllTransactionApiView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class GetStaffApiView(APIView):
+    permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -775,6 +850,7 @@ class GetStaffApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class StaffDetailsApiView(APIView):
+    permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 

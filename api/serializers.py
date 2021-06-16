@@ -1,8 +1,6 @@
-from django.db import models
+
 from rest_framework import serializers
-from api.models import ContactUs, Feedback, Notification, Setup, StaffProfile, Transaction, User, UserProfile, Wallet
-from rest_framework.authtoken.models import Token
-from rest_framework.response import Response
+from api.models import ContactUs, Feedback, InOutCount, Notification, Setup, StaffProfile, Transaction, User, UserProfile, Wallet
 
 class TestUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -27,7 +25,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = UserProfile
-        fields = ('id', 'name','fcm_token', 'birthdate', 'age', 'address', 'country', 'gender', 'city', 'zip', 'photo')
+        fields = ('id', 'name','fcm_token', 'birthdate', 'age', 'address', 'country', 'gender', 'city', 'zip', 'photo','isWallet')
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     profile = UserProfileSerializer(required=True)
@@ -44,6 +42,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         user.set_password(password)
         user.save()
         UserProfile.objects.create(user=user, **profile_data)
+        
         return user
 
     def update(self, instance, validated_data):
@@ -64,6 +63,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         profile.city = profile_data.get('city', profile.city)
         profile.zip = profile_data.get('zip', profile.zip)
         profile.photo = profile_data.get('photo', profile.photo)
+        profile.isWallet = profile_data.get('isWallet', profile.isWallet)
         profile.save()
 
         return instance
@@ -102,3 +102,8 @@ class StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = StaffProfile
         fields = fields = ('id', 'name','mobile', 'adhaar', 'setup', 'age', 'address', 'gender', 'city', 'zip', 'photo')
+
+class InOutCountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InOutCount
+        fields = ('__all__')

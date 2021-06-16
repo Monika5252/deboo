@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.utils import timezone
 import datetime
 
 class User(AbstractUser):
@@ -28,6 +27,7 @@ class UserProfile(models.Model):
     city = models.CharField(max_length=50,blank=True)
     zip = models.CharField(max_length=7,blank=True)
     photo = models.CharField(blank=True,max_length=500)
+    isWallet = models.BooleanField(default=False,blank=True)
 
 class Feedback(models.Model):
     mobile = models.CharField(max_length=15, blank=False)
@@ -104,3 +104,11 @@ class StaffProfile(models.Model):
     zip = models.CharField(max_length=7,blank=True)
     photo = models.CharField(blank=True,max_length=500)
     setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='set')
+
+
+class InOutCount(models.Model):
+    inSetup = models.IntegerField(default = 0)
+    outSetup = models.IntegerField(default = 0)
+    setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='setup_count')
+    createdAt = models.DateField(auto_now_add=True)
+    updatedAt = models.DateField(auto_now_add=True)

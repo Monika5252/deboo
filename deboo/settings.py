@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-q&&h@y1mt4662f=yybh5w@h=6cyh-r6zmqo2+0*@gywttkt01r"
-
+REFRESH_TOKEN_SECRET="django-insecure-q&&h@y1mt4662f=yybh5w@h=6cyh-r6zmqo2+0*@gywttkt01r"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -144,15 +144,24 @@ STATIC_ROOT = BASE_DIR / 'static'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
+       'DEFAULT_AUTHENTICATION_CLASSES': (
+        'api.authentication.SafeJWTAuthentication',
+    ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-    ),
+    )
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    #      'rest_framework.permissions.IsAdminUser',
+    # ),
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    #     'rest_framework.authentication.SessionAuthentication',
+    #     'rest_framework.authentication.BasicAuthentication',
+    # ),
 }
+
+
 
 datestyle = 'iso, dmy'
 
@@ -161,28 +170,26 @@ REST_USE_JWT = True
 django_heroku.settings(locals())
 
 JWT_AUTH = {
-'ACCESS_TOKEN_LIFETIME': timedelta(days=10),
-'REFRESH_TOKEN_LIFETIME': timedelta(days=20),
-'ROTATE_REFRESH_TOKENS': False,
-'BLACKLIST_AFTER_ROTATION': True,
-
-'ALGORITHM': 'HS256',
-'SIGNING_KEY': 'django-insecure-q&&h@y1mt4662f=yybh5w@h=6cyh-r6zmqo2+0*@gywttkt01r',
-'VERIFYING_KEY': None,
-'AUDIENCE': None,
-'ISSUER': None,
-
-'AUTH_HEADER_TYPES': ('JWT',),
-'USER_ID_FIELD': 'id',
-'USER_ID_CLAIM': 'user_id',
-
-'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
-'TOKEN_TYPE_CLAIM': 'token_type',
-
-'JTI_CLAIM': 'jti',
-'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
-
-'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-'SLIDING_TOKEN_LIFETIME': timedelta(days=10),
-'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=20),
+  'JWT_ENCODE_HANDLER':
+  'rest_framework_jwt.utils.jwt_encode_handler',  'JWT_DECODE_HANDLER':
+  'rest_framework_jwt.utils.jwt_decode_handler',  'JWT_PAYLOAD_HANDLER':
+  'rest_framework_jwt.utils.jwt_payload_handler',  'JWT_PAYLOAD_GET_USER_ID_HANDLER':
+  'rest_framework_jwt.utils.jwt_get_user_id_from_payload_handler',  'JWT_RESPONSE_PAYLOAD_HANDLER':
+  'rest_framework_jwt.utils.jwt_response_payload_handler',
+ 
+  'JWT_SECRET_KEY': 'SECRET_KEY',
+  'JWT_GET_USER_SECRET_KEY': None,
+  'JWT_PUBLIC_KEY': None,
+  'JWT_PRIVATE_KEY': None,
+  'JWT_ALGORITHM': 'HS256',
+  'JWT_VERIFY': True,
+  'JWT_VERIFY_EXPIRATION': True,
+  'JWT_LEEWAY': 0,
+  'JWT_EXPIRATION_DELTA': timedelta(days=30),
+  'JWT_AUDIENCE': None,
+  'JWT_ISSUER': None,
+  'JWT_ALLOW_REFRESH': False,
+  'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=30),
+  'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+  'JWT_AUTH_COOKIE': None,
 }
