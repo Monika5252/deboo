@@ -31,7 +31,7 @@ class SafeJWTAuthentication(BaseAuthentication):
                 access_token, settings.SECRET_KEY, algorithms=['HS256'])
 
         except jwt.ExpiredSignatureError:
-            raise exceptions.AuthenticationFailed('access_token expired')
+            raise exceptions.AuthenticationFailed('Token is expired')
         except IndexError:
             raise exceptions.AuthenticationFailed('Token prefix missing')
 

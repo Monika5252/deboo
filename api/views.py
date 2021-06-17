@@ -83,6 +83,8 @@ def login_view(request):
     response.data = {
         'token': access_token,
         'user_id':serialized_user['profile']['id'],
+        'name':serialized_user['profile']['name'],
+        'email':serialized_user['profile']['email'],
         'user': serialized_user
     }
 

@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^wallet/', WalletApiView.as_view()),
     path('walletmoney/<int:wallet_id>/', WalletDetailsApiView.as_view()),
 
-    url(r'^login/', views.login_view),
+    url(r'^login/', views.login_view, name="login_view"),
+    url(r'^refresh_token/', views.refresh_token_view, name="refresh_token"),
 
 ]
