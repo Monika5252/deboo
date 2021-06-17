@@ -68,13 +68,22 @@ def login_view(request):
 
     user = User.objects.filter(mobile=mobile).first()
     if(user is None):
-        
-        raise exceptions.AuthenticationFailed('user not found')
+        # user = User.objects.create(mobile=mobile, password=password)
+        # user.save()
+        # print(user,"user")
+        # serialized_user = UserSerializer(user,context={'request': request}).data
+        # print(serialized_user)
+        user = User(mobile=mobile, password=password)
+        user.set_password(password)
+        user.save()
+        UserProfile.objects.create(user=user)
+    user = User.objects.filter(mobile=mobile).first()
+        # raise exceptions.AuthenticationFailed('user not found')
     if (not user.check_password(password)):
         raise exceptions.AuthenticationFailed('wrong password')
 
     serialized_user = UserSerializer(user,context={'request': request}).data
-    print(serialized_user)
+    # print(serialized_user)
 
     access_token = generate_access_token(user)
     refresh_token = generate_refresh_token(user)
