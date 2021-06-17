@@ -84,7 +84,7 @@ def login_view(request):
         'token': access_token,
         'user_id':serialized_user['profile']['id'],
         'name':serialized_user['profile']['name'],
-        'email':serialized_user['profile']['email'],
+        'email':serialized_user['email'],
         'user': serialized_user
     }
 
