@@ -123,7 +123,7 @@ class UserViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 class FeedbackApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -154,7 +154,7 @@ class FeedbackApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class FeedbackDetailsApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -224,7 +224,7 @@ class FeedbackDetailsApiView(APIView):
 
 
 class ContactApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -253,7 +253,7 @@ class ContactApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ContactUsApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -321,7 +321,7 @@ class ContactUsApiView(APIView):
 
 
 class SetupApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -361,7 +361,7 @@ class SetupApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SetupDetailsApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -437,7 +437,7 @@ class SetupDetailsApiView(APIView):
         )
 
 class OccupySetupView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -473,7 +473,7 @@ class OccupySetupView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class NotificationApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -486,7 +486,7 @@ class NotificationApiView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class NotificationDetailsApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -552,7 +552,7 @@ class NotificationDetailsApiView(APIView):
         )
 
 class TransactionsApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -614,7 +614,7 @@ class TransactionsApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class NearMeApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -640,7 +640,7 @@ class NearMeApiView(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 class WalletApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -672,7 +672,7 @@ class WalletApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class WalletDetailsApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -804,7 +804,7 @@ def PushNotifyRelease(uid):
     return True
  
 class AllTransactionApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -817,7 +817,7 @@ class AllTransactionApiView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class GetStaffApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -861,7 +861,7 @@ class GetStaffApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class StaffDetailsApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 

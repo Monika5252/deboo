@@ -23,7 +23,7 @@ from rest_framework import exceptions
 
 
 class AdminNotificationApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -36,7 +36,7 @@ class AdminNotificationApiView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class AdminInOutCountApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
