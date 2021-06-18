@@ -464,13 +464,20 @@ class OccupySetupView(APIView):
             'isOccupied': request.data.get('isOccupied'),
             'occupiedBy': request.user.id
         }
-        serializer = SetupSerializer(instance = setup_instance, data=data, partial = True)
-        if serializer.is_valid():
-            serializer.save()
-            PushNotifyRelease(request.user.id)
-            ReleaseNotification(request.user.id, serializer.data['id'])
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = Setup.objects.filter(id=setup_id)
+
+        for i in data:
+            data.update(isOccupied=True)
+            data.update(occupiedBy=request.user.id)
+        PushNotifyRelease(request.user.id)
+        # ReleaseNotification(request.user.id, setup_id)
+        # serializer = SetupSerializer(instance = setup_instance, data=data, partial = True)
+        # if serializer.is_valid():
+        #     serializer.save()
+        #     PushNotifyRelease(request.user.id)
+        #     ReleaseNotification(request.user.id, serializer.data['id'])
+        #     return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
 
 class NotificationApiView(APIView):
     # permission_classes = [IsAuthenticated]
