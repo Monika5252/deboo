@@ -106,7 +106,6 @@ class StaffProfile(models.Model):
     photo = models.CharField(blank=True,max_length=500)
     setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='set')
 
-
 class InOutCount(models.Model):
     inSetup = models.IntegerField(default = 0)
     outSetup = models.IntegerField(default = 0)
