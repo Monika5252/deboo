@@ -462,7 +462,7 @@ class OccupySetupView(APIView):
             )
         data = {
             'isOccupied': request.data.get('isOccupied'),
-            'occupiedBy': ''
+            'occupiedBy': request.user.id
         }
         serializer = SetupSerializer(instance = setup_instance, data=data, partial = True)
         if serializer.is_valid():
@@ -664,8 +664,10 @@ class WalletApiView(APIView):
         serializer = WalletSerializer(data=data)
         if serializer.is_valid():
             userData = UserProfile.objects.filter(id=request.user.id)
+            print(userData)
             for d in userData:
                 userData.update(isWallet=True)
+                print(d, 'user details')
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
