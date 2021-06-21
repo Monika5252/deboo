@@ -468,7 +468,7 @@ class OccupySetupView(APIView):
 
         for i in data:
             data.update(isOccupied=False)
-            data.update(isTransactionComplete=True)
+            data.update(isTransactionComplete=False)
         PushNotifyRelease(request.user.id)
         # ReleaseNotification(request.user.id, setup_id)
         # serializer = SetupSerializer(instance = setup_instance, data=data, partial = True)
@@ -593,19 +593,19 @@ class TransactionsApiView(APIView):
 
         if serializer.is_valid():
             serializer.save()
-            # get_wallet = Wallet.objects.filter(id=request.data.get('w_id'))
+            get_wallet = Wallet.objects.filter(id=request.data.get('w_id'))
             
-            # wallet_serializer = WalletSerializer(get_wallet, many=True)
+            wallet_serializer = WalletSerializer(get_wallet, many=True)
 
-            # for i in get_wallet:
-            #     get_wallet.update(balance=i.balance-int(request.data.get('money')))
+            for i in get_wallet:
+                get_wallet.update(balance=i.balance-int(request.data.get('money')))
 
             data = Setup.objects.filter(id=serializer.data['setup'])
 
             for i in data:
                 data.update(isOccupied=True)
-                data.update(occupiedBy=request.user.id)
                 data.update(isTransactionComplete=True)
+                data.update(occupiedBy=request.user.id)
 
             serialized_qs = serializers.serialize('json', data)
             send = {
