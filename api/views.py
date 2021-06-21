@@ -467,8 +467,8 @@ class OccupySetupView(APIView):
         data = Setup.objects.filter(id=setup_id)
 
         for i in data:
-            data.update(isOccupied=True)
-            data.update(occupiedBy=request.user.id)
+            data.update(isOccupied=False)
+            data.update(isTransactionComplete=True)
         PushNotifyRelease(request.user.id)
         # ReleaseNotification(request.user.id, setup_id)
         # serializer = SetupSerializer(instance = setup_instance, data=data, partial = True)
@@ -593,32 +593,37 @@ class TransactionsApiView(APIView):
 
         if serializer.is_valid():
             serializer.save()
-            PushNotifyBook(request.user.id)
-            BookNotification(request.user.id, request.data.get('setup'))
-            get_wallet = Wallet.objects.filter(id=request.data.get('w_id'))
+            # get_wallet = Wallet.objects.filter(id=request.data.get('w_id'))
             
-            wallet_serializer = WalletSerializer(get_wallet, many=True)
-           
-            for i in get_wallet:
-                get_wallet.update(balance=i.balance-int(request.data.get('money')))
+            # wallet_serializer = WalletSerializer(get_wallet, many=True)
+
+            # for i in get_wallet:
+            #     get_wallet.update(balance=i.balance-int(request.data.get('money')))
 
             data = Setup.objects.filter(id=serializer.data['setup'])
 
             for i in data:
                 data.update(isOccupied=True)
                 data.update(occupiedBy=request.user.id)
+                data.update(isTransactionComplete=True)
 
             serialized_qs = serializers.serialize('json', data)
             send = {
                 "data":serializer.data,
                 "setup": serialized_qs
             }
+
+            PushNotifyBook(request.user.id)
+            BookNotification(request.user.id, request.data.get('setup'))
             
             # serialized_qs = serializers.serialize('json', send)
             
             return Response(send, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# def transactionSuccess():
+#     SetupTransactionSuccess.objects.create()
 
 class NearMeApiView(APIView):
     # permission_classes = [IsAuthenticated]

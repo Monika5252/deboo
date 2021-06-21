@@ -69,6 +69,7 @@ class Setup(models.Model):
     createdAt = models.DateField(auto_now_add=True)
     updatedAt = models.DateField(auto_now_add=True)
     staff = models.IntegerField(blank=True, null=True)
+    isTransactionComplete = models.BooleanField(default=False)
 
 class Transaction(models.Model):
     transaction_id = models.CharField(max_length=30, blank=False)
@@ -79,6 +80,7 @@ class Transaction(models.Model):
     setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='setup')
     createdAt = models.DateField(auto_now_add=True)
     updatedAt = models.DateField(auto_now_add=True)
+    isRead = models.BooleanField(default=False)
 
 class Notification(models.Model):
     text = models.CharField(max_length=255, blank=False)
@@ -110,5 +112,11 @@ class InOutCount(models.Model):
     inSetup = models.IntegerField(default = 0)
     outSetup = models.IntegerField(default = 0)
     setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='setup_count')
+    createdAt = models.DateField(auto_now_add=True)
+    updatedAt = models.DateField(auto_now_add=True)
+
+class SetupTransactionSuccess(models.Model):
+    transactionSuccess = models.BooleanField(default = False)
+    setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='transaction_success')
     createdAt = models.DateField(auto_now_add=True)
     updatedAt = models.DateField(auto_now_add=True)

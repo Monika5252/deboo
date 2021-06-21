@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from api.models import ContactUs, Feedback, InOutCount, Notification, Setup, StaffProfile, Transaction, User, UserProfile, Wallet
+from api.models import ContactUs, Feedback, InOutCount, Notification, Setup, SetupTransactionSuccess, StaffProfile, Transaction, User, UserProfile, Wallet
 
 
 class TestUserSerializer(serializers.ModelSerializer):
