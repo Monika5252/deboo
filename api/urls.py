@@ -1,7 +1,7 @@
 from api.admin_views.adminviews import AdminInOutCountApiView, AdminNotificationApiView
 from django.conf.urls import url, include
 from rest_framework import routers
-from api.views import AllTransactionApiView, StaffDetailsApiView, ContactApiView, ContactUsApiView, FeedbackApiView, FeedbackDetailsApiView, GetStaffApiView, NearMeApiView, NotificationApiView, NotificationDetailsApiView, OccupySetupView, SetupApiView, SetupDetailsApiView, TransactionsApiView, UserViewSet, WalletApiView, WalletDetailsApiView
+from api.views import AllTransactionApiView, StaffDetailsApiView, ContactApiView, ContactUsApiView, FeedbackApiView, FeedbackDetailsApiView, GetStaffApiView, NearMeApiView, NotificationApiView, NotificationDetailsApiView, OccupySetupView, SetupApiView, SetupDetailsApiView, TransactionDetailsApiView, TransactionsApiView, UserViewSet, WalletApiView, WalletDetailsApiView
 from django.urls import path, include
 from . import views
 router = routers.DefaultRouter()
@@ -26,6 +26,7 @@ urlpatterns = [
 
     url(r'^transaction/', TransactionsApiView.as_view()),
     url(r'^allTransaction/', AllTransactionApiView.as_view()),
+    path('transactiondetails/<int:transaction_id>/', TransactionDetailsApiView.as_view()),
 
     url(r'^staff/', GetStaffApiView.as_view()),
     path('staffdetail/<int:staff_id>/', StaffDetailsApiView.as_view()),

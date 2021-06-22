@@ -623,8 +623,71 @@ class TransactionsApiView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# def transactionSuccess():
-#     SetupTransactionSuccess.objects.create()
+class TransactionDetailsApiView(APIView):
+    # permission_classes = [IsAuthenticated]
+    # add permission to check if user is authenticated
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, transaction_id):
+        '''
+        Helper method to get the object with given transaction id
+        '''
+        try:
+            return Transaction.objects.get(id=transaction_id)
+        except Transaction.DoesNotExist:
+            return None
+
+    # 3. Retrieve
+    def get(self, request, transaction_id, *args, **kwargs):
+        '''
+        Retrieves the Transaction with given notify id
+        '''
+        notify_instance = self.get_object(transaction_id)
+        if not notify_instance:
+            return Response(
+                {"res": "Transaction with this id does not exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = TransactionSerializer(notify_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 4. Update
+    def put(self, request, transaction_id, *args, **kwargs):
+        '''
+        Updates the Transaction details with given transaction id if exists
+        '''
+        notify_instance = self.get_object(transaction_id)
+        if not notify_instance:
+            return Response(
+                {"res": "Transaction with this id does not exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        data = {
+            'isRead': request.data.get('isRead')
+        }
+        serializer = TransactionSerializer(instance = notify_instance, data=data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # 5. Delete
+    def delete(self, request, transaction_id, *args, **kwargs):
+        '''
+        Deletes Transaction details with given id if exists
+        '''
+        notify_instance = self.get_object(transaction_id)
+        if not notify_instance:
+            return Response(
+                {"res": "Transaction with this id does not exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        notify_instance.delete()
+        return Response(
+            {"res": "Transaction deleted!"},
+            status=status.HTTP_200_OK
+        )
 
 class NearMeApiView(APIView):
     # permission_classes = [IsAuthenticated]
