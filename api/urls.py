@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^allTransaction/', AllTransactionApiView.as_view()),
 
     url(r'^staff/', GetStaffApiView.as_view()),
+    url(r'^staffdetail/', StaffDetailsApiView.as_view()),
 
     url(r'^nearme/', NearMeApiView.as_view()),
 
