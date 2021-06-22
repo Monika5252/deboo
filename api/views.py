@@ -348,6 +348,7 @@ class SetupApiView(APIView):
             'city': request.data.get('city'), 
             'zip': request.data.get('zip'), 
             'photo': request.data.get('photo'),
+            'fees': request.data.get('fees'),
             'isOccupied': request.data.get('isOccupied'),
             'isCleaned': request.data.get('isCleaned'), 
             'createdBy': request.user.id,
