@@ -880,7 +880,7 @@ class StaffDetailsApiView(APIView):
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self, request, staff_id):
+    def get_object(self, staff_id):
         '''
         Helper method to get the object with given staff id
         '''
