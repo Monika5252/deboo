@@ -997,7 +997,7 @@ class StaffDetailsApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # 5. Delete
-    def delete(self, staff_id, *args, **kwargs):
+    def delete(self, request, staff_id, *args, **kwargs):
         '''
         Deletes Staff profile details with given id if exists
         '''
