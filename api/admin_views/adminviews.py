@@ -48,3 +48,68 @@ class AdminInOutCountApiView(APIView):
         serializer = InOutCountSerializer(inOut, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+class InOutDetailsApiView(APIView):
+    # permission_classes = [IsAuthenticated]
+    # add permission to check if user is authenticated
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, inOut_id):
+        '''
+        Helper method to get the object with given id
+        '''
+        try:
+            return InOutCount.objects.get(id=inOut_id)
+        except InOutCount.DoesNotExist:
+            return None
+
+    # 3. Retrieve
+    def get(self, request, inOut_id, *args, **kwargs):
+        '''
+        Retrieves the details with given id
+        '''
+        inOut_instance = self.get_object(inOut_id)
+        if not inOut_instance:
+            return Response(
+                {"res": "Record with this id does not exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = InOutCountSerializer(inOut_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # # 4. Update
+    # def put(self, request, inOut_id, *args, **kwargs):
+    #     '''
+    #     Updates the Transaction details with given transaction id if exists
+    #     '''
+    #     notify_instance = self.get_object(inOut_id)
+    #     if not notify_instance:
+    #         return Response(
+    #             {"res": "Record with this id does not exists"}, 
+    #             status=status.HTTP_400_BAD_REQUEST
+    #         )
+    #     data = {
+    #         'isRead': request.data.get('isRead')
+    #     }
+    #     serializer = TransactionSerializer(instance = notify_instance, data=data, partial = True)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_200_OK)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # 5. Delete
+    def delete(self, request, inOut_id, *args, **kwargs):
+        '''
+        Deletes Record details with given id if exists
+        '''
+        inOut_instance = self.get_object(inOut_id)
+        if not inOut_instance:
+            return Response(
+                {"res": "Record with this id does not exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        inOut_instance.delete()
+        return Response(
+            {"res": "Record deleted!"},
+            status=status.HTTP_200_OK
+        )

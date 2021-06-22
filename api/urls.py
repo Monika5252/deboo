@@ -1,4 +1,4 @@
-from api.admin_views.adminviews import AdminInOutCountApiView, AdminNotificationApiView
+from api.admin_views.adminviews import AdminInOutCountApiView, AdminNotificationApiView, InOutDetailsApiView
 from django.conf.urls import url, include
 from rest_framework import routers
 from api.views import AllTransactionApiView, StaffDetailsApiView, ContactApiView, ContactUsApiView, FeedbackApiView, FeedbackDetailsApiView, GetStaffApiView, NearMeApiView, NotificationApiView, NotificationDetailsApiView, OccupySetupView, SetupApiView, SetupDetailsApiView, TransactionDetailsApiView, TransactionsApiView, UserViewSet, WalletApiView, WalletDetailsApiView
@@ -40,6 +40,8 @@ urlpatterns = [
     url(r'^refresh_token/', views.refresh_token_view, name="refresh_token"),
 
     url(r'^inout/', AdminInOutCountApiView.as_view()),
+    path('inOutdetails/<int:inOut_id>/', InOutDetailsApiView.as_view()),
+
     url(r'^allnotification/', AdminNotificationApiView.as_view()),
 
 ]
