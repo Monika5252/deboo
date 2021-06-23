@@ -98,7 +98,7 @@ class WalletSerializer(serializers.ModelSerializer):
 class StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = StaffProfile
-        fields = fields = ('id', 'name','mobile', 'adhaar', 'setup', 'age', 'address', 'gender', 'city', 'zip', 'photo')
+        fields = ('id', 'name','mobile', 'adhaar', 'setup', 'age', 'address', 'gender', 'city', 'zip', 'photo')
 
 class InOutCountSerializer(serializers.ModelSerializer):
     class Meta:

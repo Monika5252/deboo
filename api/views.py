@@ -481,7 +481,7 @@ class OccupySetupView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 class NotificationApiView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -494,7 +494,7 @@ class NotificationApiView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class NotificationDetailsApiView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
@@ -536,7 +536,8 @@ class NotificationDetailsApiView(APIView):
         data = {
             'isRead': request.data.get('isRead')
         }
-        serializer = NotificationSerializer(instance = notify_instance, data=data, partial = True)
+        print(data, 'data get')
+        serializer = NotificationSerializer(instance = notify_instance, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)

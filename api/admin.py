@@ -28,7 +28,7 @@ class SetupInline(admin.ModelAdmin):
 class NotificationInline(admin.ModelAdmin):
     model = Notification
     can_delete = True
-    list_display = ('id', 'text', 'isRead', 'setup', 'user')
+    list_display = ('id','text','isRead','setup','user','createdAt','updatedAt')
 
 class TransactionInline(admin.ModelAdmin):
     model = Transaction
