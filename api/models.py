@@ -72,6 +72,12 @@ class Setup(models.Model):
     staff = models.IntegerField(blank=True, null=True)
     isTransactionComplete = models.BooleanField(default=False)
 
+class Wallet(models.Model):
+       user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True)
+       balance = models.IntegerField(default = 0)
+       createdAt = models.DateTimeField(default=timezone.now)
+       updatedAt = models.DateTimeField(default=timezone.now)
+
 class Transaction(models.Model):
     transaction_id = models.CharField(max_length=30, blank=False)
     money = models.IntegerField(blank=False)
@@ -80,6 +86,7 @@ class Transaction(models.Model):
     date = models.DateField(default=datetime.date.today)
     user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, related_name='user')
     setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='setup')
+    w_id = models.ForeignKey(Wallet, on_delete = models.CASCADE, blank = True, null=True, related_name='wallet_id')
     createdAt = models.DateTimeField(default=timezone.now)
     updatedAt = models.DateTimeField(default=timezone.now)
     isRead = models.BooleanField(default=False)
@@ -91,12 +98,6 @@ class Notification(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, related_name='userss')
     createdAt = models.DateTimeField(default=timezone.now)
     updatedAt = models.DateTimeField(default=timezone.now)
-
-class Wallet(models.Model):
-       user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True)
-       balance = models.IntegerField(default = 0)
-       createdAt = models.DateTimeField(default=timezone.now)
-       updatedAt = models.DateTimeField(default=timezone.now)
 
 class StaffProfile(models.Model):
     name = models.CharField(max_length=55,blank=True)

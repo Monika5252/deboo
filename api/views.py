@@ -584,11 +584,12 @@ class TransactionsApiView(APIView):
             'money': request.data.get('money'),
             'mobile': request.data.get('mobile'),
             'setup': request.data.get('setup'),
-            'user': request.user.id
+            'user': request.user.id,
+            'w_id': request.data.get('w_id')
         }
         
         # wallet_money = request.data.get('walletMoney')
-        wallet_id = request.data.get('w_id')
+        # wallet_id = request.data.get('w_id')
         # print(wallet_money)
 
         serializer = TransactionSerializer(data=data)
@@ -597,12 +598,14 @@ class TransactionsApiView(APIView):
             serializer.save()
             get_wallet = Wallet.objects.filter(id=request.data.get('w_id'))
             
-            wallet_serializer = WalletSerializer(get_wallet, many=True)
+            # wallet_serializer = WalletSerializer(get_wallet, many=True)
 
             for i in get_wallet:
                 get_wallet.update(balance=i.balance-int(request.data.get('money')))
 
             data = Setup.objects.filter(id=serializer.data['setup'])
+
+            wallet_data = Wallet.objects.filter(id=serializer.data['w_id'])
 
             for i in data:
                 data.update(isOccupied=True)
@@ -610,9 +613,11 @@ class TransactionsApiView(APIView):
                 data.update(occupiedBy=request.user.id)
 
             serialized_qs = serializers.serialize('json', data)
+            serialized_wallet = serializers.serialize('json', wallet_data)
             send = {
                 "data":serializer.data,
-                "setup": serialized_qs
+                "setup": serialized_qs,
+                "wallet": serialized_wallet
             }
 
             PushNotifyBook(request.user.id)

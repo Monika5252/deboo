@@ -33,7 +33,7 @@ class NotificationInline(admin.ModelAdmin):
 class TransactionInline(admin.ModelAdmin):
     model = Transaction
     can_delete = True
-    list_display = ('transaction_id', 'money', 'user', 'setup')
+    list_display = ('transaction_id', 'money', 'user', 'setup','w_id')
 
 class WalletInline(admin.ModelAdmin):
     model = Wallet
