@@ -147,21 +147,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     # 'DATE_INPUT_FORMATS': ["%Y-%m-%d %H:%M:%S"],
      'DATETIME_FORMAT': "%Y-%m-%dT%H:%M:%S.%fZ",
-    #    'DEFAULT_AUTHENTICATION_CLASSES': (
-    #     'api.authentication.SafeJWTAuthentication',
-    # ),
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # )
+       'DEFAULT_AUTHENTICATION_CLASSES': (
+        'api.authentication.SafeJWTAuthentication',
+    ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-         'rest_framework.permissions.IsAdminUser',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-    ),
+    )
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    #      'rest_framework.permissions.IsAdminUser',
+    # ),
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    #     'rest_framework.authentication.SessionAuthentication',
+    #     'rest_framework.authentication.BasicAuthentication',
+    # ),
 }
 
 datestyle = 'iso, dmy'
