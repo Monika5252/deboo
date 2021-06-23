@@ -56,7 +56,7 @@ def refresh_token_view(request):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
-@ensure_csrf_cookie
+# @ensure_csrf_cookie
 def login_view(request):
     User = get_user_model()
     mobile = request.data.get('mobile')
@@ -498,7 +498,7 @@ class NotificationDetailsApiView(APIView):
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self, request, notify_id):
+    def get_object(self, notify_id):
         '''
         Helper method to get the object with given setup id
         '''
@@ -543,7 +543,7 @@ class NotificationDetailsApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # 5. Delete
-    def delete(self, notify_id, *args, **kwargs):
+    def delete(self, notify_id, request, *args, **kwargs):
         '''
         Deletes Notification details with given id if exists
         '''

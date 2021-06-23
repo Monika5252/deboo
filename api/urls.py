@@ -22,7 +22,7 @@ urlpatterns = [
     path('occupy/<int:setup_id>/', OccupySetupView.as_view()),
     
     url(r'^notifications/', NotificationApiView.as_view()),
-    path('notifications/<int:notify_id>/', NotificationDetailsApiView.as_view()),
+    path('notificationdetails/<int:notify_id>/', NotificationDetailsApiView.as_view()),
 
     url(r'^transaction/', TransactionsApiView.as_view()),
     url(r'^allTransaction/', AllTransactionApiView.as_view()),

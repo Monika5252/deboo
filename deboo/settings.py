@@ -28,6 +28,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["debooapi.herokuapp.com","localhost"]
 
+CSRF_TRUSTED_ORIGINS = ["127.0.0.1","debooapi.herokuapp.com","localhost"]       
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 AUTH_USER_MODEL = 'api.User'
 
 # Application definition
@@ -64,6 +67,7 @@ FCM_DJANGO_SETTINGS = {
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_REPLACE_HTTPS_REFERER = True
 
 ROOT_URLCONF = 'deboo.urls'
 
