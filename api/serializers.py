@@ -68,7 +68,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class UserFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
-        fields = ('id','mobile', 'rate', 'text', 'user')
+        fields = ('id','mobile', 'rate', 'text', 'user','createdAt','updatedAt')
 
 class ContactUsSerializer(serializers.ModelSerializer):
     class Meta:
