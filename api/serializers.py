@@ -88,7 +88,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = ('__all__')
+        fields = ('id','text','isRead','setup','user','createdAt','updatedAt')
 
 class WalletSerializer(serializers.ModelSerializer):
     class Meta:
