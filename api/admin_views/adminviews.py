@@ -49,13 +49,21 @@ class AdminInOutCountApiView(APIView):
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
-        '''
-        List all the In Out count
-        '''
-        inOut = InOutCount.objects.all()
-        serializer = InOutCountSerializer(inOut, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    # def get(self, request, *args, **kwargs):
+    #     '''
+    #     List all the In Out count
+    #     '''
+    #     inOut = InOutCount.objects.all()
+    #     serializer = InOutCountSerializer(inOut, many=True)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
+    def get_queryset(self):
+        queryset = InOutCount.objects.all()
+        return queryset
+
+    serializer_class = InOutCountSerializer
+    filter_backends = [SearchFilter,]
+    search_fields  = ('id','setup','inSetup','outSetup')
+
 
 class InOutDetailsApiView(APIView):
     # permission_classes = [IsAuthenticated]
@@ -141,7 +149,7 @@ class AdminStaffApiView(generics.ListAPIView):
 
     serializer_class = StaffSerializer
     filter_backends = [SearchFilter,]
-    search_fields  = ('name', 'mobile', 'gender')
+    search_fields  = ('name', 'mobile', 'age','setup', 'gender')
 
 class AdminFeedbackApiView(generics.ListAPIView):
     # permission_classes = [IsAuthenticated]
@@ -161,7 +169,7 @@ class AdminSetupApiView(generics.ListAPIView):
 
     serializer_class = SetupSerializer
     filter_backends = [SearchFilter,]
-    search_fields  = ('name', 'fees')
+    search_fields  = ('name', 'fees','city','country')
 
 class AdminUserApiView(generics.ListAPIView):
     # permission_classes = [IsAuthenticated]
@@ -171,4 +179,4 @@ class AdminUserApiView(generics.ListAPIView):
 
     serializer_class = UserProfile
     filter_backends = [SearchFilter,]
-    search_fields  = ('name','email', 'mobile')
+    search_fields  = ('name','email','mobile','age')

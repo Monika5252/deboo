@@ -46,6 +46,7 @@ urlpatterns = [
     url(r'^allsetup/', AdminSetupApiView.as_view()),
     url(r'^alltransaction/', AdminTransactionsApiView.as_view()),
     url(r'^allfeedback/', AdminFeedbackApiView.as_view()),
-    url(r'^allusers/', AdminUserApiView.as_view())
+    url(r'^allusers/', AdminUserApiView.as_view()),
+    url(r'^allstaff/', AdminStaffApiView.as_view())
 
 ]
