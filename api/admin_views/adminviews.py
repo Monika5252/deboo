@@ -157,7 +157,7 @@ class AdminFeedbackApiView(generics.ListAPIView):
         queryset = Feedback.objects.all()
         return queryset
 
-    serializer_class = Feedback
+    serializer_class = UserFeedbackSerializer
     filter_backends = [SearchFilter,]
     search_fields  = ('rate', 'mobile', 'text')
 

@@ -108,7 +108,7 @@ class StaffProfile(models.Model):
     gender = models.CharField(max_length=8,blank=True)
     city = models.CharField(max_length=50,blank=True)
     zip = models.CharField(max_length=7,blank=True)
-    photo = models.CharField(blank=True,max_length=500)
+    photo = models.CharField(blank=True, null=True, max_length=500)
     setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='set')
     createdAt = models.DateTimeField(default=timezone.now)
     updatedAt = models.DateTimeField(default=timezone.now)
