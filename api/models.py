@@ -79,7 +79,7 @@ class Wallet(models.Model):
        updatedAt = models.DateTimeField(default=timezone.now)
 
 class Transaction(models.Model):
-    transaction_id = models.CharField(max_length=30, blank=False)
+    transaction_id = models.CharField(max_length=30, blank=False,null=True)
     money = models.IntegerField(blank=False)
     mobile = models.CharField(max_length=15, blank=False)
     status = models.CharField(max_length=12, blank=True, null=True)

@@ -975,7 +975,7 @@ class StaffDetailsApiView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        serializer = StaffSerializer(staff_id)
+        serializer = StaffSerializer(staff_instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # 4. Update
