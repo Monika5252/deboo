@@ -1,4 +1,4 @@
-from api.admin_views.adminviews import AdminFeedbackApiView, AdminInOutCountApiView, AdminNotificationApiView, AdminSetupApiView, AdminTransactionsApiView, AdminUserApiView, InOutDetailsApiView
+from api.admin_views.adminviews import AdminFeedbackApiView, AdminInOutCountApiView, AdminNotificationApiView, AdminSetupApiView, AdminTransactionsApiView, AdminUserApiView, InOutDetailsApiView, AdminStaffApiView
 from django.conf.urls import url, include
 from rest_framework import routers
 from api.views import AllTransactionApiView, StaffDetailsApiView, ContactApiView, ContactUsApiView, FeedbackApiView, FeedbackDetailsApiView, GetStaffApiView, NearMeApiView, NotificationApiView, NotificationDetailsApiView, OccupySetupView, SetupApiView, SetupDetailsApiView, TransactionDetailsApiView, TransactionsApiView, UserViewSet, WalletApiView, WalletDetailsApiView
