@@ -20,10 +20,12 @@ from django.conf import settings
 
 from django.views.decorators.csrf import csrf_protect
 from rest_framework import exceptions
+from rest_framework.filters import SearchFilter
+from rest_framework import generics
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
-@csrf_protect
+# @csrf_protect
 def refresh_token_view(request):
     '''
     To obtain a new access_token this view expects 2 important things:
@@ -94,6 +96,9 @@ def login_view(request):
         'user_id':serialized_user['profile']['id'],
         'name':serialized_user['profile']['name'],
         'email':serialized_user['email'],
+        'first_name': serialized_user['first_name'],
+        'last_name': serialized_user['last_name'],
+        'mobile': serialized_user['mobile'],
         'user': serialized_user
     }
 
@@ -195,7 +200,7 @@ class FeedbackDetailsApiView(APIView):
             )
         data = {
             'mobile': request.data.get('mobile'), 
-            'rate': request.data.get('rate'), 
+            'rate': request.data.get('rate'),
             'text': request.data.get('text'),
             'user': request.user.id
         }

@@ -1,3 +1,4 @@
+from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from api.models import ContactUs, Feedback, InOutCount, Notification, Setup, StaffProfile, Transaction, User, UserProfile, Wallet
@@ -21,19 +22,27 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
 from rest_framework import exceptions
 
+from rest_framework.filters import SearchFilter
 
-class AdminNotificationApiView(APIView):
+class AdminNotificationApiView(generics.ListAPIView):
+    def get_queryset(self):
+        queryset = Notification.objects.all()
+        return queryset
+
+    serializer_class = NotificationSerializer
+    filter_backends = [SearchFilter,]
+    search_fields  = ('id', 'text','isRead')
     # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
-        '''
-        List all the Notifications
-        '''
-        notify = Notification.objects.all()
-        serializer = NotificationSerializer(notify, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    # def get(self, request, *args, **kwargs):
+    #     '''
+    #     List all the Notifications
+    #     '''
+    #     notify = Notification.objects.all()
+    #     serializer = NotificationSerializer(notify, many=True)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
 
 class AdminInOutCountApiView(APIView):
     # permission_classes = [IsAuthenticated]
@@ -113,3 +122,53 @@ class InOutDetailsApiView(APIView):
             {"res": "Record deleted!"},
             status=status.HTTP_200_OK
         )
+
+class AdminTransactionsApiView(generics.ListAPIView):
+    # permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        queryset = Transaction.objects.all()
+        return queryset
+
+    serializer_class = TransactionSerializer
+    filter_backends = [SearchFilter,]
+    search_fields  = ('id','transaction_id','money','mobile')
+
+class AdminStaffApiView(generics.ListAPIView):
+    # permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        queryset = StaffProfile.objects.all()
+        return queryset
+
+    serializer_class = StaffSerializer
+    filter_backends = [SearchFilter,]
+    search_fields  = ('name', 'mobile', 'gender')
+
+class AdminFeedbackApiView(generics.ListAPIView):
+    # permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        queryset = Feedback.objects.all()
+        return queryset
+
+    serializer_class = Feedback
+    filter_backends = [SearchFilter,]
+    search_fields  = ('rate', 'mobile', 'text')
+
+class AdminSetupApiView(generics.ListAPIView):
+    # permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        queryset = Setup.objects.all()
+        return queryset
+
+    serializer_class = SetupSerializer
+    filter_backends = [SearchFilter,]
+    search_fields  = ('name', 'fees')
+
+class AdminUserApiView(generics.ListAPIView):
+    # permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        queryset = UserProfile.objects.all()
+        return queryset
+
+    serializer_class = UserProfile
+    filter_backends = [SearchFilter,]
+    search_fields  = ('name','email', 'mobile')

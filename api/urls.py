@@ -1,4 +1,4 @@
-from api.admin_views.adminviews import AdminInOutCountApiView, AdminNotificationApiView, InOutDetailsApiView
+from api.admin_views.adminviews import AdminFeedbackApiView, AdminInOutCountApiView, AdminNotificationApiView, AdminSetupApiView, AdminTransactionsApiView, AdminUserApiView, InOutDetailsApiView
 from django.conf.urls import url, include
 from rest_framework import routers
 from api.views import AllTransactionApiView, StaffDetailsApiView, ContactApiView, ContactUsApiView, FeedbackApiView, FeedbackDetailsApiView, GetStaffApiView, NearMeApiView, NotificationApiView, NotificationDetailsApiView, OccupySetupView, SetupApiView, SetupDetailsApiView, TransactionDetailsApiView, TransactionsApiView, UserViewSet, WalletApiView, WalletDetailsApiView
@@ -25,7 +25,7 @@ urlpatterns = [
     path('notificationdetails/<int:notify_id>/', NotificationDetailsApiView.as_view()),
 
     url(r'^transaction/', TransactionsApiView.as_view()),
-    url(r'^allTransaction/', AllTransactionApiView.as_view()),
+    # url(r'^allTransaction/', AllTransactionApiView.as_view()),
     path('transactiondetails/<int:transaction_id>/', TransactionDetailsApiView.as_view()),
 
     url(r'^staff/', GetStaffApiView.as_view()),
@@ -43,5 +43,9 @@ urlpatterns = [
     path('inOutdetails/<int:inOut_id>/', InOutDetailsApiView.as_view()),
 
     url(r'^allnotification/', AdminNotificationApiView.as_view()),
+    url(r'^allsetup/', AdminSetupApiView.as_view()),
+    url(r'^alltransaction/', AdminTransactionsApiView.as_view()),
+    url(r'^allfeedback/', AdminFeedbackApiView.as_view()),
+    url(r'^allusers/', AdminUserApiView.as_view())
 
 ]
