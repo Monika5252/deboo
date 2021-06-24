@@ -44,7 +44,7 @@ class AdminNotificationApiView(generics.ListAPIView):
     #     serializer = NotificationSerializer(notify, many=True)
     #     return Response(serializer.data, status=status.HTTP_200_OK)
 
-class AdminInOutCountApiView(APIView):
+class AdminInOutCountApiView(generics.ListAPIView):
     # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
@@ -65,7 +65,7 @@ class AdminInOutCountApiView(APIView):
     search_fields  = ('id','setup','inSetup','outSetup')
 
 
-class InOutDetailsApiView(APIView):
+class InOutDetailsApiView(generics.ListAPIView):
     # permission_classes = [IsAuthenticated]
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
