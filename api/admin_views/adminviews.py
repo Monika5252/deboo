@@ -149,7 +149,7 @@ class AdminStaffApiView(generics.ListAPIView):
 
     serializer_class = StaffSerializer
     filter_backends = [SearchFilter,]
-    search_fields  = ('name', 'mobile', 'age','setup', 'gender')
+    search_fields  = ('name', 'mobile','gender')
 
 class AdminFeedbackApiView(generics.ListAPIView):
     # permission_classes = [IsAuthenticated]
