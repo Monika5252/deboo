@@ -58,6 +58,9 @@ class AdminInOutCountApiView(generics.ListAPIView):
     #     return Response(serializer.data, status=status.HTTP_200_OK)
     def get_queryset(self):
         queryset = InOutCount.objects.all()
+        setup = self.request.GET.get('setup')
+        if setup:
+            queryset = queryset.filter(setup=setup)
         return queryset
 
     serializer_class = InOutCountSerializer
@@ -166,6 +169,9 @@ class AdminStaffApiView(generics.ListAPIView):
     # permission_classes = [IsAuthenticated]
     def get_queryset(self):
         queryset = StaffProfile.objects.all()
+        setup = self.request.GET.get('setup')
+        if setup:
+            queryset = queryset.filter(setup=setup)
         return queryset
 
     serializer_class = StaffSerializer
@@ -196,6 +202,9 @@ class AdminUserApiView(generics.ListAPIView):
     # permission_classes = [IsAuthenticated]
     def get_queryset(self):
         queryset = UserProfile.objects.all()
+        setup = self.request.GET.get('setup')
+        if setup:
+            queryset = queryset.filter(setup=setup)
         return queryset
 
     serializer_class = UserProfile
