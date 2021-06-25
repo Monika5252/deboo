@@ -147,7 +147,7 @@ class AdminTransactionsApiView(generics.ListAPIView):
             # except Exception as e:
             #     return Response({'reason':'From Date is invalid'}, status=status.HTTP_400_BAD_REQUEST)
             # fromDate = datetime.datetime.fromtimestamp(fromDate)
-            queryset = queryset.filter(setup__lte=setup)
+            queryset = queryset.filter(setup=setup)
             
         # if toDate:
         #     try:
