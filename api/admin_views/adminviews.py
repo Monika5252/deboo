@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from api.models import ContactUs, Feedback, InOutCount, Notification, Setup, StaffProfile, Transaction, User, UserProfile, Wallet
-from api.serializers import ContactUsSerializer, InOutCountSerializer, NotificationSerializer, SetupSerializer, StaffSerializer, TransactionSerializer, UserSerializer, UserFeedbackSerializer, WalletSerializer
+from api.serializers import ContactUsSerializer, InOutCountSerializer, NotificationSerializer, SetupSerializer, StaffSerializer, TransactionSerializer, UserProfileSerializer, UserSerializer, UserFeedbackSerializer, WalletSerializer
 import datetime
 from rest_framework.response import Response
 from rest_framework import status
@@ -201,12 +201,12 @@ class AdminSetupApiView(generics.ListAPIView):
 class AdminUserApiView(generics.ListAPIView):
     # permission_classes = [IsAuthenticated]
     def get_queryset(self):
-        queryset = UserProfile.objects.all()
+        queryset = User.objects.filter()
         setup = self.request.GET.get('setup')
         if setup:
             queryset = queryset.filter(setup=setup)
         return queryset
 
-    serializer_class = UserProfile
+    serializer_class = UserSerializer
     filter_backends = [SearchFilter,]
     search_fields  = ('name','email','mobile','age')
