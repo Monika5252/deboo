@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from api.models import ContactUs, Feedback, Notification, Setup, StaffProfile, Transaction, User, UserProfile, Wallet
-from api.serializers import ContactUsSerializer, NotificationSerializer, SetupSerializer, StaffSerializer, TransactionSerializer, UserSerializer, UserFeedbackSerializer, WalletSerializer
+from api.models import ContactUs, Feedback, Notification, Setup, StaffProfile, Transaction, User, UserProfile, Wallet, WalletTransaction
+from api.serializers import ContactUsSerializer, NotificationSerializer, SetupSerializer, StaffSerializer, TransactionSerializer, UserSerializer, UserFeedbackSerializer, WalletSerializer, WalletTransactionSerializer
 
 from rest_framework.response import Response
 from rest_framework import status
@@ -415,6 +415,8 @@ class SetupDetailsApiView(APIView):
             'city': request.data.get('city'), 
             'zip': request.data.get('zip'), 
             'photo': request.data.get('photo'),
+            'isActive': request.data.get('isActive'),
+            'isDeleted': request.data.get('isDeleted'),
             'isOccupied': request.data.get('isOccupied'),
             'isCleaned': request.data.get('isCleaned'),
             'updatedBy': request.user.id
@@ -699,6 +701,89 @@ class TransactionDetailsApiView(APIView):
             {"res": "Transaction deleted!"},
             status=status.HTTP_200_OK
         )
+
+
+class WalletTransactionDetailsApiView(APIView):
+    # permission_classes = [IsAuthenticated]
+    # add permission to check if user is authenticated
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, wallet_id):
+        '''
+        Helper method to get the object with given wallet id
+        '''
+        try:
+            return WalletTransaction.objects.get(id=wallet_id)
+        except WalletTransaction.DoesNotExist:
+            return None
+
+    # 3. Retrieve
+    def get(self, request, wallet_id, *args, **kwargs):
+        '''
+        Retrieves the Transaction with given wallet id
+        '''
+        wallet_instance = self.get_object(wallet_id)
+        if not wallet_instance:
+            return Response(
+                {"res": "Transaction with this id does not exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = WalletTransactionSerializer(wallet_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # 5. Delete
+    def delete(self, request, wallet_id, *args, **kwargs):
+        '''
+        Deletes Transaction details with given id if exists
+        '''
+        wallet_instance = self.get_object(wallet_id)
+        if not wallet_instance:
+            return Response(
+                {"res": "Transaction with this id does not exists"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        wallet_instance.delete()
+        return Response(
+            {"res": "Wallet Transaction deleted!"},
+            status=status.HTTP_200_OK
+        )
+
+
+class WalletTransactionsApiView(APIView):
+    # permission_classes = [IsAuthenticated]
+    # add permission to check if user is authenticated
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        '''
+        List all the Wallet Transactions data
+        '''
+        wallet = WalletTransaction.objects.filter(user=request.user.id)
+        serializer = WalletTransactionSerializer(wallet, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        '''
+        Create Wallet Transaction with given data
+        '''
+
+        data = {
+            'transaction_id': request.data.get('transaction_id'),
+            'amount': request.data.get('amount'),
+            'mobile': request.data.get('mobile'),
+            'wallet_id': request.data.get('w_id'),
+            'user': request.user.id,
+            'w_id': request.data.get('w_id')
+        }
+
+        serializer = WalletTransactionSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class NearMeApiView(APIView):
     # permission_classes = [IsAuthenticated]

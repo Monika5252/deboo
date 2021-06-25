@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib import admin
-from .models import ContactUs, Feedback, InOutCount, Notification, Setup, SetupTransactionSuccess, StaffProfile, Transaction, User, UserProfile, Wallet
+from .models import ContactUs, Feedback, InOutCount, Notification, Setup, SetupTransactionSuccess, StaffProfile, Transaction, User, UserProfile, Wallet, WalletTransaction
 
 
 class UserProfileInline(admin.StackedInline):
@@ -50,6 +50,12 @@ class InOutCountInline(admin.ModelAdmin):
     can_delete = True
     list_display = ('inSetup', 'outSetup','setup','createdAt','updatedAt')
 
+class WalletTransactionInline(admin.ModelAdmin):
+    model = WalletTransaction
+    can_delete = True
+    list_display = ('transaction_id', 'mobile', 'wallet_id', 'amount','createdAt','updatedAt')
+
+admin.site.register(WalletTransaction, WalletTransactionInline)
 admin.site.register(InOutCount, InOutCountInline)
 admin.site.register(StaffProfile, StaffInline)
 admin.site.register(Wallet, WalletInline)

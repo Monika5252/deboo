@@ -71,6 +71,8 @@ class Setup(models.Model):
     updatedAt = models.DateTimeField(default=timezone.now)
     staff = models.IntegerField(blank=True, null=True)
     isTransactionComplete = models.BooleanField(default=False)
+    isActive = models.BooleanField(default=True, blank=True, null=True)
+    isDeleted = models.BooleanField(default=False, blank=True, null=True)
 
 class Wallet(models.Model):
        user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True)
@@ -123,5 +125,13 @@ class InOutCount(models.Model):
 class SetupTransactionSuccess(models.Model):
     transactionSuccess = models.BooleanField(default = False)
     setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='transaction_success')
+    createdAt = models.DateTimeField(default=timezone.now)
+    updatedAt = models.DateTimeField(default=timezone.now)
+
+class WalletTransaction(models.Model):
+    transaction_id = models.BooleanField(default = False)
+    mobile = models.IntegerField(null=True,blank=True)
+    wallet_id = models.ForeignKey(Wallet, on_delete = models.CASCADE, blank = True, related_name='wallet_transaction')
+    amount = models.IntegerField(blank=True, null=True)
     createdAt = models.DateTimeField(default=timezone.now)
     updatedAt = models.DateTimeField(default=timezone.now)
