@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from api.models import ContactUs, Feedback, InOutCount, Notification, Setup, StaffProfile, Transaction, User, UserProfile, Wallet
 from api.serializers import ContactUsSerializer, InOutCountSerializer, NotificationSerializer, SetupSerializer, StaffSerializer, TransactionSerializer, UserSerializer, UserFeedbackSerializer, WalletSerializer
-
+import datetime
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -132,9 +132,30 @@ class InOutDetailsApiView(generics.ListAPIView):
         )
 
 class AdminTransactionsApiView(generics.ListAPIView):
-    # permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]\
+    
     def get_queryset(self):
         queryset = Transaction.objects.all()
+            # queryset = Transaction.objects.all()
+        setup = self.request.GET.get('setup')
+        print(setup, 'setup id')
+        # toDate = self.request.GET.get('to')
+        
+        if setup:
+            # try:
+            #     fromDate = float(fromDate)
+            # except Exception as e:
+            #     return Response({'reason':'From Date is invalid'}, status=status.HTTP_400_BAD_REQUEST)
+            # fromDate = datetime.datetime.fromtimestamp(fromDate)
+            queryset = queryset.filter(setup__lte=setup)
+            
+        # if toDate:
+        #     try:
+        #         toDate = float(toDate)
+        #     except Exception as e:
+        #         return Response({'reason':'To Date is invalid'}, status=status.HTTP_400_BAD_REQUEST)
+        #     toDate = datetime.datetime.fromtimestamp(toDate)
+        #     queryset = queryset.filter(createdAt__lte = toDate)
         return queryset
 
     serializer_class = TransactionSerializer
