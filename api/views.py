@@ -80,7 +80,7 @@ def login_view(request):
         user = User(mobile=mobile, password=password)
         user.set_password(password)
         user.save()
-        UserProfile.objects.create(user=user)
+        UserProfile.objects.create(user=user,user_type=request.data.get('user_type'))
     
     if(user is None and user_type == '1'):
         return Response(
@@ -126,7 +126,7 @@ def login_view(request):
         'name':serialized_user['profile']['name'],
         'email':serialized_user['email'],
         'first_name': serialized_user['first_name'],
-        'type': serialized_user['user_type'],
+        'type': serialized_user['profile']['user_type'],
         'last_name': serialized_user['last_name'],
         'mobile': serialized_user['mobile'],
         'user': serialized_user
