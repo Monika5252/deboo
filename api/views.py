@@ -63,13 +63,15 @@ def login_view(request):
     User = get_user_model()
     mobile = request.data.get('mobile')
     password = request.data.get('password')
+    user_type = request.data.get('user_type')
+    print(user_type, 'user_type')
     response = Response()
     if (mobile is None) or (password is None):
         raise exceptions.AuthenticationFailed(
             'credentials required')
 
     user = User.objects.filter(mobile=mobile).first()
-    if(user is None):
+    if(user is None and user_type!='1'):
         # user = User.objects.create(mobile=mobile, password=password)
         # user.save()
         # print(user,"user")
@@ -79,6 +81,12 @@ def login_view(request):
         user.set_password(password)
         user.save()
         UserProfile.objects.create(user=user)
+    if(user is None and user_type == '1'):
+        return Response(
+                {"res": "Admin does not exist."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
     user = User.objects.filter(mobile=mobile).first()
         # raise exceptions.AuthenticationFailed('user not found')
     if (not user.check_password(password)):
@@ -97,6 +105,7 @@ def login_view(request):
         'name':serialized_user['profile']['name'],
         'email':serialized_user['email'],
         'first_name': serialized_user['first_name'],
+        'type': serialized_user['user_type'],
         'last_name': serialized_user['last_name'],
         'mobile': serialized_user['mobile'],
         'user': serialized_user
