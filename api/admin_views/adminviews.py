@@ -1,3 +1,4 @@
+from django.db.models.query import QuerySet
 from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -58,6 +59,13 @@ class AdminInOutCountApiView(generics.ListAPIView):
     #     return Response(serializer.data, status=status.HTTP_200_OK)
     def get_queryset(self):
         queryset = InOutCount.objects.all()
+        print(queryset, 'in out')
+        # data = {}
+        # for i in queryset:
+        #     print(i.setup.name, 'in out')
+        #     data.update({"setup_name":i.setup.name,"queryset":queryset})
+
+        # print(data, 'setup')
         setup = self.request.GET.get('setup')
         if setup:
             queryset = queryset.filter(setup=setup)
@@ -135,11 +143,11 @@ class InOutDetailsApiView(generics.ListAPIView):
         )
 
 class AdminTransactionsApiView(generics.ListAPIView):
-    # permission_classes = [IsAuthenticated]\
+    # permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
         queryset = Transaction.objects.all()
-            # queryset = Transaction.objects.all()
+        # queryset = Transaction.objects.all()
         setup = self.request.GET.get('setup')
         print(setup, 'setup id')
         # toDate = self.request.GET.get('to')
@@ -206,7 +214,5 @@ class AdminUserApiView(generics.ListAPIView):
         if setup:
             queryset = queryset.filter(setup=setup)
         return queryset
-
-    serializer_class = UserSerializer
     filter_backends = [SearchFilter,]
     search_fields  = ('name','email','mobile','age')

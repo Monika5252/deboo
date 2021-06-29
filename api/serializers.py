@@ -5,7 +5,7 @@ from api.models import ContactUs, Feedback, InOutCount, Notification, Setup, Set
 
 class TestUserSerializer(serializers.ModelSerializer):
     model = User
-    fields = fields = ('url', 'mobile', 'email', 'first_name', 'last_name', 'password', 'profile')
+    fields = fields = ('url', 'mobile', 'email', 'first_name', 'last_name', 'user_type', 'password', 'profile')
     extra_kwargs = {'password': {'write_only': True}}
     
     def create(self, validated_data):
@@ -28,7 +28,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('url', 'mobile', 'email', 'first_name', 'last_name', 'password', 'profile')
+        fields = ('url', 'mobile', 'email', 'first_name', 'last_name', 'user_type', 'password', 'profile')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):

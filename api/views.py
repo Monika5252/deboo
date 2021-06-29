@@ -481,7 +481,7 @@ class OccupySetupView(APIView):
         # ReleaseNotification(request.user.id, setup_id)
         # serializer = SetupSerializer(instance = setup_instance, data=data, partial = True)
         # if serializer.is_valid():
-        #     serializer.save()
+        #     serializer.save() 
         #     PushNotifyRelease(request.user.id)
         #     ReleaseNotification(request.user.id, serializer.data['id'])
         #     return Response(serializer.data, status=status.HTTP_200_OK)
