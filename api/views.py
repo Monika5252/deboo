@@ -81,25 +81,45 @@ def login_view(request):
         user.set_password(password)
         user.save()
         UserProfile.objects.create(user=user)
+    
     if(user is None and user_type == '1'):
         return Response(
-                {"res": "Admin does not exist."},
+                {"res": "Admin with these credentials does not exists"},
                 status=status.HTTP_400_BAD_REQUEST
             )
+    
+    if(user and user_type == '1'):
+        serialized_user = UserSerializer(user,context={'request': request}).data
+        access_token = generate_access_token(user)
+        refresh_token = generate_refresh_token(user)
+        
+        response.set_cookie(key='refreshtoken', value=refresh_token, httponly=True)
 
-    user = User.objects.filter(mobile=mobile).first()
+        response.data = {
+        'token': access_token,
+        'user_id':serialized_user['profile']['id'],
+        'name':serialized_user['profile']['name'],
+        'email':serialized_user['email'],
+        'first_name': serialized_user['first_name'],
+        'type': serialized_user['profile']['user_type'],
+        'last_name': serialized_user['last_name'],
+        'mobile': serialized_user['mobile'],
+        'user': serialized_user
+        }
+        return response
+
+    if(user and user_type!='1'):
+        user = User.objects.filter(mobile=mobile).first()
         # raise exceptions.AuthenticationFailed('user not found')
-    if (not user.check_password(password)):
-        raise exceptions.AuthenticationFailed('wrong password')
-
-    serialized_user = UserSerializer(user,context={'request': request}).data
-    # print(serialized_user)
-
-    access_token = generate_access_token(user)
-    refresh_token = generate_refresh_token(user)
-
-    response.set_cookie(key='refreshtoken', value=refresh_token, httponly=True)
-    response.data = {
+        if (not user.check_password(password)):
+            raise exceptions.AuthenticationFailed('wrong password')
+            
+        serialized_user = UserSerializer(user,context={'request': request}).data
+        access_token = generate_access_token(user)
+        refresh_token = generate_refresh_token(user)
+        
+        response.set_cookie(key='refreshtoken', value=refresh_token, httponly=True)
+        response.data = {
         'token': access_token,
         'user_id':serialized_user['profile']['id'],
         'name':serialized_user['profile']['name'],
@@ -109,9 +129,9 @@ def login_view(request):
         'last_name': serialized_user['last_name'],
         'mobile': serialized_user['mobile'],
         'user': serialized_user
-    }
-
-    return response
+        }
+        
+        return response
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

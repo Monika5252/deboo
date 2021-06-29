@@ -3,32 +3,18 @@ from rest_framework import serializers
 from api.models import ContactUs, Feedback, InOutCount, Notification, Setup, SetupTransactionSuccess, StaffProfile, Transaction, User, UserProfile, Wallet, WalletTransaction
 
 
-class TestUserSerializer(serializers.ModelSerializer):
-    model = User
-    fields = fields = ('url', 'mobile', 'email', 'first_name', 'last_name', 'user_type', 'password', 'profile')
-    extra_kwargs = {'password': {'write_only': True}}
-    
-    def create(self, validated_data):
-        profile_data = validated_data.pop('profile')
-        password = validated_data.pop('password')
-        user = User(**validated_data)
-        user.set_password(password)
-        user.save()
-        UserProfile.objects.create(user=user, **profile_data)
-        return user
-
 class UserProfileSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = UserProfile
-        fields = ('id', 'name','fcm_token', 'birthdate', 'age', 'address', 'country', 'gender', 'city', 'zip', 'photo','isWallet')
+        fields = ('id', 'name','fcm_token', 'birthdate', 'age', 'address', 'country', 'gender', 'city', 'zip', 'photo','isWallet','user_type')
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     profile = UserProfileSerializer(required=True)
 
     class Meta:
         model = User
-        fields = ('url', 'mobile', 'email', 'first_name', 'last_name', 'user_type', 'password', 'profile')
+        fields = ('url', 'mobile', 'email', 'first_name', 'last_name', 'password', 'profile')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
