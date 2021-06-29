@@ -59,13 +59,6 @@ class AdminInOutCountApiView(generics.ListAPIView):
     #     return Response(serializer.data, status=status.HTTP_200_OK)
     def get_queryset(self):
         queryset = InOutCount.objects.all()
-        print(queryset, 'in out')
-        # data = {}
-        # for i in queryset:
-        #     print(i.setup.name, 'in out')
-        #     data.update({"setup_name":i.setup.name,"queryset":queryset})
-
-        # print(data, 'setup')
         setup = self.request.GET.get('setup')
         if setup:
             queryset = queryset.filter(setup=setup)

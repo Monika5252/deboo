@@ -144,6 +144,9 @@ STATIC_ROOT = BASE_DIR / 'static'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+CITY_STATE_FILE = os.path.join(BASE_DIR, 'state-city.json')
+
 REST_FRAMEWORK = {
     # 'DATE_INPUT_FORMATS': ["%Y-%m-%d %H:%M:%S"],
      'DATETIME_FORMAT': "%Y-%m-%dT%H:%M:%S.%fZ",

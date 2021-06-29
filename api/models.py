@@ -40,6 +40,10 @@ class Feedback(models.Model):
     createdAt = models.DateTimeField(default=timezone.now)
     updatedAt = models.DateTimeField(default=timezone.now)
 
+    @property
+    def userDetails(self):
+        return self.user
+
     def __str__(self):
         return "{}".format(self.mobile)
 
@@ -93,6 +97,7 @@ class Transaction(models.Model):
     createdAt = models.DateTimeField(default=timezone.now)
     updatedAt = models.DateTimeField(default=timezone.now)
     isRead = models.BooleanField(default=False)
+    
 
 class Notification(models.Model):
     text = models.CharField(max_length=255, blank=False)
@@ -101,6 +106,10 @@ class Notification(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, related_name='userss')
     createdAt = models.DateTimeField(default=timezone.now)
     updatedAt = models.DateTimeField(default=timezone.now)
+
+    @property
+    def setupDetails(self):
+        return self.setup
 
 class StaffProfile(models.Model):
     name = models.CharField(max_length=55,blank=True)
@@ -122,6 +131,10 @@ class InOutCount(models.Model):
     setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='setup_count')
     createdAt = models.DateTimeField(default=timezone.now)
     updatedAt = models.DateTimeField(default=timezone.now)
+
+    @property
+    def setupDetails(self):
+        return self.setup
 
 class SetupTransactionSuccess(models.Model):
     transactionSuccess = models.BooleanField(default = False)

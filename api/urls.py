@@ -50,6 +50,8 @@ urlpatterns = [
     url(r'^alltransaction/', AdminTransactionsApiView.as_view()),
     url(r'^allfeedback/', AdminFeedbackApiView.as_view()),
     url(r'^allusers/', AdminUserApiView.as_view()),
-    url(r'^allstaff/', AdminStaffApiView.as_view())
+    url(r'^allstaff/', AdminStaffApiView.as_view()),
+
+    url(r'^city_state/$', views.CityStateListView.as_view())
 
 ]

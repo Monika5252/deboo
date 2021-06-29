@@ -9,19 +9,16 @@ from rest_framework import status
 from rest_framework.views import APIView
 from django.core import serializers
 from fcm_django.models import FCMDevice
-from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view, permission_classes
-from django.views.decorators.csrf import ensure_csrf_cookie
 from api.utils import generate_access_token, generate_refresh_token
 from rest_framework import exceptions
 import jwt
 from django.conf import settings
 
-from django.views.decorators.csrf import csrf_protect
+from django.http.response import JsonResponse
+
 from rest_framework import exceptions
-from rest_framework.filters import SearchFilter
-from rest_framework import generics
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -1138,3 +1135,10 @@ class StaffDetailsApiView(APIView):
             {"res": "Staff Profile deleted!"},
             status=status.HTTP_200_OK
         )
+
+class CityStateListView(APIView):
+    def get(self, request):
+        fh = open(settings.CITY_STATE_FILE)
+        data = fh.read()
+        import json
+        return JsonResponse(json.loads(data), safe=False)

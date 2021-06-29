@@ -1,15 +1,15 @@
 
-from rest_framework import serializers
 from api.models import ContactUs, Feedback, InOutCount, Notification, Setup, SetupTransactionSuccess, StaffProfile, Transaction, User, UserProfile, Wallet, WalletTransaction
 
+from rest_framework.serializers import ModelSerializer
 
-class UserProfileSerializer(serializers.ModelSerializer):
+class UserProfileSerializer(ModelSerializer):
     
     class Meta:
         model = UserProfile
         fields = ('id', 'name','fcm_token', 'birthdate', 'age', 'address', 'country', 'gender', 'city', 'zip', 'photo','isWallet','user_type')
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(ModelSerializer):
     profile = UserProfileSerializer(required=True)
 
     class Meta:
@@ -53,47 +53,50 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
         return instance
 
-class UserFeedbackSerializer(serializers.ModelSerializer):
+class UserFeedbackSerializer(ModelSerializer):
+    userDetails = UserSerializer(read_only=True)
     class Meta:
         model = Feedback
-        fields = ('id','mobile', 'rate', 'text', 'user','createdAt','updatedAt')
+        fields = ('id','mobile', 'rate', 'text', 'userDetails','createdAt','updatedAt')
 
-class ContactUsSerializer(serializers.ModelSerializer):
+class ContactUsSerializer(ModelSerializer):
     class Meta:
         model = ContactUs
         fields = ('id','contact','mobile')
 
-class SetupSerializer(serializers.ModelSerializer):
+class SetupSerializer(ModelSerializer):
     class Meta:
         model = Setup
         fields = ('__all__')
 
-class TransactionSerializer(serializers.ModelSerializer):
+class TransactionSerializer(ModelSerializer):
     class Meta:
         model = Transaction
         fields = ('__all__')
 
-class WalletTransactionSerializer(serializers.ModelSerializer):
+class WalletTransactionSerializer(ModelSerializer):
     class Meta:
         model = WalletTransaction
         fields = ('__all__')
 
-class NotificationSerializer(serializers.ModelSerializer):
+class NotificationSerializer(ModelSerializer):
+    setupDetails = SetupSerializer(read_only=True)
     class Meta:
         model = Notification
-        fields = ('id','text','isRead','setup','user','createdAt','updatedAt')
+        fields = ('id','text','isRead','setupDetails','user','createdAt','updatedAt')
 
-class WalletSerializer(serializers.ModelSerializer):
+class WalletSerializer(ModelSerializer):
     class Meta:
         model = Wallet
         fields = ('__all__')
 
-class StaffSerializer(serializers.ModelSerializer):
+class StaffSerializer(ModelSerializer):
     class Meta:
         model = StaffProfile
         fields = ('id', 'name','mobile', 'adhaar', 'setup', 'age', 'address', 'gender', 'city', 'zip', 'photo')
 
-class InOutCountSerializer(serializers.ModelSerializer):
+class InOutCountSerializer(ModelSerializer):
+    setupDetails = SetupSerializer(read_only=True)
     class Meta:
         model = InOutCount
-        fields = ('__all__')
+        fields = ('inSetup','outSetup', 'setupDetails', 'createdAt','updatedAt')
