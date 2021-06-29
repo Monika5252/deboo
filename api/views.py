@@ -77,7 +77,7 @@ def login_view(request):
         # print(user,"user")
         # serialized_user = UserSerializer(user,context={'request': request}).data
         # print(serialized_user)
-        user = User(mobile=mobile, password=password, user_type=user_type)
+        user = User(mobile=mobile, password=password)
         user.set_password(password)
         user.save()
         UserProfile.objects.create(user=user)
