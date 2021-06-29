@@ -80,7 +80,7 @@ class UserAdmin(BaseUserAdmin):
             'fields': ('email', 'password1', 'password2'),
         }),
     )
-    list_display = ('mobile', 'email', 'first_name', 'last_name', 'is_staff')
+    list_display = ('mobile', 'email', 'first_name', 'last_name', 'user_type', 'is_staff')
     search_fields = ('mobile', 'email' 'first_name', 'last_name')
     ordering = ('mobile',)
     inlines = (UserProfileInline, )
