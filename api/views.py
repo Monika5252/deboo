@@ -92,6 +92,7 @@ def login_view(request):
         serialized_user = UserSerializer(user,context={'request': request}).data
         access_token = generate_access_token(user)
         refresh_token = generate_refresh_token(user)
+        print(serialized_user, 'serialized user')
         
         response.set_cookie(key='refreshtoken', value=refresh_token, httponly=True)
 

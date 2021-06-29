@@ -47,6 +47,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         profile.zip = profile_data.get('zip', profile.zip)
         profile.photo = profile_data.get('photo', profile.photo)
         profile.isWallet = profile_data.get('isWallet', profile.isWallet)
+
+        profile.user_type = profile_data.get('user_type', profile.user_type)
         profile.save()
 
         return instance
