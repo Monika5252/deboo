@@ -128,6 +128,10 @@ class StaffProfile(models.Model):
     createdAt = models.DateTimeField(default=timezone.now)
     updatedAt = models.DateTimeField(default=timezone.now)
 
+    @property
+    def setupDetails(self):
+        return self.setup
+
 class InOutCount(models.Model):
     inSetup = models.IntegerField(default = 0)
     outSetup = models.IntegerField(default = 0)
