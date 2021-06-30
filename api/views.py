@@ -377,6 +377,7 @@ class SetupApiView(APIView):
             'longitude': request.data.get('longitude'), 
             'latitude': request.data.get('latitude'),
             'country': request.data.get('country'),
+            'state': request.data.get('state'),
             'city': request.data.get('city'), 
             'zip': request.data.get('zip'), 
             'photo': request.data.get('photo'),
@@ -439,6 +440,7 @@ class SetupDetailsApiView(APIView):
             'longitude': request.data.get('longitude'), 
             'latitude': request.data.get('latitude'),
             'country': request.data.get('country'),
+            'state': request.data.get('state'),
             'city': request.data.get('city'), 
             'zip': request.data.get('zip'), 
             'photo': request.data.get('photo'),
@@ -1045,6 +1047,8 @@ class GetStaffApiView(APIView):
             'adhaar': request.data.get('adhaar'),
             'age': request.data.get('age'), 
             'gender': request.data.get('gender'),
+            'country': request.data.get('country'),
+            'state': request.data.get('state'),
             'city': request.data.get('city'),
             'setup': request.data.get('setup_id')
         }
@@ -1109,7 +1113,9 @@ class StaffDetailsApiView(APIView):
             'photo': request.data.get('photo'),
             'adhaar': request.data.get('adhaar'),
             'age': request.data.get('age'), 
-            'gender': request.data.get('gender'),
+            'gender': request.data.get('gender'),            
+            'country': request.data.get('country'),
+            'state': request.data.get('state'),
             'city': request.data.get('city'),
             'setup': request.data.get('setup_id')
         }
