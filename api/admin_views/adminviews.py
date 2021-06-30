@@ -208,4 +208,5 @@ class AdminUserApiView(generics.ListAPIView):
             queryset = queryset.filter(setup=setup)
         return queryset
     filter_backends = [SearchFilter,]
+    serializer_class = UserSerializer
     search_fields  = ('name','email','mobile','age')
