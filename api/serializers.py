@@ -83,7 +83,7 @@ class NotificationSerializer(ModelSerializer):
     setupDetails = SetupSerializer(read_only=True)
     class Meta:
         model = Notification
-        fields = ('id','text','isRead','setupDetails','user','createdAt','updatedAt')
+        fields = ('id','text','isRead', 'setup','setupDetails','user','createdAt','updatedAt')
 
 class WalletSerializer(ModelSerializer):
     class Meta:
@@ -100,4 +100,4 @@ class InOutCountSerializer(ModelSerializer):
     setupDetails = SetupSerializer(read_only=True)
     class Meta:
         model = InOutCount
-        fields = ('inSetup','outSetup', 'setupDetails', 'createdAt','updatedAt')
+        fields = ('inSetup','outSetup', 'setup', 'setupDetails', 'createdAt','updatedAt')

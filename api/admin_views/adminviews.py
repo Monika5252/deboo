@@ -173,6 +173,7 @@ class AdminStaffApiView(generics.ListAPIView):
         setup = self.request.GET.get('setup')
         if setup:
             queryset = queryset.filter(setup=setup)
+        queryset = queryset.order_by('-updatedAt')
         return queryset
 
     serializer_class = StaffSerializer
@@ -183,6 +184,7 @@ class AdminFeedbackApiView(generics.ListAPIView):
     # permission_classes = [IsAuthenticated]
     def get_queryset(self):
         queryset = Feedback.objects.all()
+        queryset = queryset.order_by('-updatedAt')
         return queryset
 
     serializer_class = UserFeedbackSerializer
@@ -193,6 +195,7 @@ class AdminSetupApiView(generics.ListAPIView):
     # permission_classes = [IsAuthenticated]
     def get_queryset(self):
         queryset = Setup.objects.all()
+        
         return queryset
 
     serializer_class = SetupSerializer

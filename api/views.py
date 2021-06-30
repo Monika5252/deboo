@@ -61,7 +61,6 @@ def login_view(request):
     mobile = request.data.get('mobile')
     password = request.data.get('password')
     user_type = request.data.get('user_type')
-    print(user_type, 'user_type')
     response = Response()
     if (mobile is None) or (password is None):
         raise exceptions.AuthenticationFailed(
@@ -89,7 +88,6 @@ def login_view(request):
         serialized_user = UserSerializer(user,context={'request': request}).data
         access_token = generate_access_token(user)
         refresh_token = generate_refresh_token(user)
-        print(serialized_user, 'serialized user')
         
         response.set_cookie(key='refreshtoken', value=refresh_token, httponly=True)
 
