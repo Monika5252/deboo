@@ -91,7 +91,7 @@ class Transaction(models.Model):
     money = models.IntegerField(blank=False)
     mobile = models.CharField(max_length=15, blank=False)
     status = models.CharField(max_length=12, blank=True, null=True)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateField(default=datetime.date.today)
     user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, related_name='user')
     setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='setup')
     w_id = models.ForeignKey(Wallet, on_delete = models.CASCADE, blank = True, null=True, related_name='wallet_id')
