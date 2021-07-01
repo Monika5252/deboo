@@ -657,7 +657,7 @@ class TransactionsApiView(APIView):
             PushNotifyBook(request.user.id)
             PushNotifyAdmin()
             BookNotification(request.user.id, request.data.get('setup'))
-            BookNotificationAdmin(request.user.mobile, request.data.get('setup'))
+            BookNotificationAdmin(request.user.id, request.data.get('setup'))
             # serialized_qs = serializers.serialize('json', send)
             
             return Response(send, status=status.HTTP_201_CREATED)
@@ -963,7 +963,7 @@ def BookNotification(user, setup):
 
 def BookNotificationAdmin(user, setup):
     note = {
-    'text':  user + ' has booked ' + setup + ' this setup.',
+    'text':  'A user has booked ' + setup + ' this setup.',
     'isRead': 'False',
     'setup': setup,
     'user': user,
