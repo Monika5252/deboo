@@ -211,7 +211,6 @@ class AdminUserApiView(generics.ListAPIView):
         setup = self.request.GET.get('setup')
         if setup:
             queryset = queryset.filter(setup=setup)
-        queryset = queryset.order_by('-updatedAt')
         return queryset
     filter_backends = [SearchFilter,]
     serializer_class = UserSerializer
