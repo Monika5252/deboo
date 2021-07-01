@@ -949,7 +949,7 @@ class WalletDetailsApiView(APIView):
 
 def BookNotification(user, setup):
     note = {
-    'text': 'You have booked' + setup + 'this setup.',
+    'text': 'You have booked ' + setup + ' this setup.',
     'isRead': 'False',
     'setup': setup,
     'user': user,

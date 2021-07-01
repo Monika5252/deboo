@@ -30,7 +30,7 @@ class UserProfile(models.Model):
     zip = models.CharField(max_length=7,blank=True)
     photo = models.CharField(blank=True,max_length=500)
     isWallet = models.BooleanField(default=False,blank=True)
-    user_type = models.IntegerField(blank=True,null=True)
+    user_type = models.IntegerField(default=0,blank=True,null=True)
 
 class Feedback(models.Model):
     mobile = models.CharField(max_length=15, blank=False)
