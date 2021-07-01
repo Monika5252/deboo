@@ -1,5 +1,5 @@
 
-from api.models import ContactUs, Feedback, InOutCount, Notification, Setup, SetupTransactionSuccess, StaffProfile, Transaction, User, UserProfile, Wallet, WalletTransaction
+from api.models import AdminNotification, ContactUs, Feedback, InOutCount, Notification, Setup, SetupTransactionSuccess, StaffProfile, Transaction, User, UserProfile, Wallet, WalletTransaction
 
 from rest_framework.serializers import ModelSerializer
 
@@ -84,6 +84,13 @@ class NotificationSerializer(ModelSerializer):
     class Meta:
         model = Notification
         fields = ('id','text','isRead', 'setup','setupDetails','user','createdAt','updatedAt')
+
+class AdminNotificationSerializer(ModelSerializer):
+    setupDetails = SetupSerializer(read_only=True)
+    class Meta:
+        model = AdminNotification
+        fields = ('id','text','isRead', 'setup','setupDetails','user','createdAt','updatedAt')
+
 
 class WalletSerializer(ModelSerializer):
     class Meta:

@@ -112,6 +112,18 @@ class Notification(models.Model):
     def setupDetails(self):
         return self.setup
 
+class AdminNotification(models.Model):
+    text = models.CharField(max_length=255, blank=False)
+    isRead = models.BooleanField(default=False)
+    setup = models.ForeignKey(Setup, on_delete = models.CASCADE, blank = True, related_name='admin_notification_setups')
+    user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, related_name='admin_notification_users')
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
+
+    @property
+    def setupDetails(self):
+        return self.setup
+
 class StaffProfile(models.Model):
     name = models.CharField(max_length=55,blank=True)
     mobile = models.CharField(max_length=255,blank=True)

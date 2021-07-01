@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib import admin
-from .models import ContactUs, Feedback, InOutCount, Notification, Setup, SetupTransactionSuccess, StaffProfile, Transaction, User, UserProfile, Wallet, WalletTransaction
+from .models import AdminNotification, ContactUs, Feedback, InOutCount, Notification, Setup, SetupTransactionSuccess, StaffProfile, Transaction, User, UserProfile, Wallet, WalletTransaction
 
 
 class UserProfileInline(admin.StackedInline):
@@ -27,6 +27,11 @@ class SetupInline(admin.ModelAdmin):
 
 class NotificationInline(admin.ModelAdmin):
     model = Notification
+    can_delete = True
+    list_display = ('id','text','isRead','setup','user','createdAt','updatedAt')
+
+class AdminNotificationInline(admin.ModelAdmin):
+    model = AdminNotification
     can_delete = True
     list_display = ('id','text','isRead','setup','user','createdAt','updatedAt')
 
@@ -61,6 +66,7 @@ admin.site.register(StaffProfile, StaffInline)
 admin.site.register(Wallet, WalletInline)
 admin.site.register(Transaction, TransactionInline)
 admin.site.register(Notification, NotificationInline)
+admin.site.register(AdminNotification, AdminNotificationInline)
 admin.site.register(Feedback, UserFeedbackInline)
 admin.site.register(ContactUs, UserContactInline)
 admin.site.register(Setup, SetupInline)

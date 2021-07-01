@@ -1,4 +1,4 @@
-from api.admin_views.adminviews import AdminFeedbackApiView, AdminInOutCountApiView, AdminNotificationApiView, AdminSetupApiView, AdminTransactionsApiView, AdminUserApiView, InOutDetailsApiView, AdminStaffApiView
+from api.admin_views.adminviews import AdminFeedbackApiView, AdminInOutCountApiView, AdminNotificationAdminApiView, AdminNotificationApiView, AdminSetupApiView, AdminTransactionsApiView, AdminUserApiView, InOutDetailsApiView, AdminStaffApiView
 from django.conf.urls import url, include
 from rest_framework import routers
 from api.views import AllTransactionApiView, StaffDetailsApiView, ContactApiView, ContactUsApiView, FeedbackApiView, FeedbackDetailsApiView, GetStaffApiView, NearMeApiView, NotificationApiView, NotificationDetailsApiView, OccupySetupView, SetupApiView, SetupDetailsApiView, TransactionDetailsApiView, TransactionsApiView, UserViewSet, WalletApiView, WalletDetailsApiView, WalletTransactionDetailsApiView, WalletTransactionsApiView
@@ -51,6 +51,7 @@ urlpatterns = [
     url(r'^allfeedback/', AdminFeedbackApiView.as_view()),
     url(r'^allusers/', AdminUserApiView.as_view()),
     url(r'^allstaff/', AdminStaffApiView.as_view()),
+    url(r'^alladminnotification/', AdminNotificationAdminApiView.as_view()),
 
     url(r'^city_state/$', views.CityStateListView.as_view())
 

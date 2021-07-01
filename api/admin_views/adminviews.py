@@ -2,8 +2,8 @@ from django.db.models.query import QuerySet
 from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from api.models import ContactUs, Feedback, InOutCount, Notification, Setup, StaffProfile, Transaction, User, UserProfile, Wallet
-from api.serializers import ContactUsSerializer, InOutCountSerializer, NotificationSerializer, SetupSerializer, StaffSerializer, TransactionSerializer, UserProfileSerializer, UserSerializer, UserFeedbackSerializer, WalletSerializer
+from api.models import AdminNotification, ContactUs, Feedback, InOutCount, Notification, Setup, StaffProfile, Transaction, User, UserProfile, Wallet
+from api.serializers import AdminNotificationSerializer, ContactUsSerializer, InOutCountSerializer, NotificationSerializer, SetupSerializer, StaffSerializer, TransactionSerializer, UserProfileSerializer, UserSerializer, UserFeedbackSerializer, WalletSerializer
 import datetime
 from rest_framework.response import Response
 from rest_framework import status
@@ -215,3 +215,13 @@ class AdminUserApiView(generics.ListAPIView):
     filter_backends = [SearchFilter,]
     serializer_class = UserSerializer
     search_fields  = ('name','email','mobile','age')
+
+class AdminNotificationAdminApiView(generics.ListAPIView):
+    def get_queryset(self):
+        queryset = AdminNotification.objects.all()
+        queryset = queryset.order_by('-updatedAt')
+        return queryset
+
+    serializer_class = AdminNotificationSerializer
+    filter_backends = [SearchFilter,]
+    search_fields  = ('id', 'text','isRead')

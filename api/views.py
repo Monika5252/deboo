@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from api.models import ContactUs, Feedback, Notification, Setup, StaffProfile, Transaction, User, UserProfile, Wallet, WalletTransaction
-from api.serializers import ContactUsSerializer, NotificationSerializer, SetupSerializer, StaffSerializer, TransactionSerializer, UserSerializer, UserFeedbackSerializer, WalletSerializer, WalletTransactionSerializer
+from api.serializers import AdminNotificationSerializer, ContactUsSerializer, NotificationSerializer, SetupSerializer, StaffSerializer, TransactionSerializer, UserSerializer, UserFeedbackSerializer, WalletSerializer, WalletTransactionSerializer
 
 from rest_framework.response import Response
 from rest_framework import status
@@ -655,8 +655,9 @@ class TransactionsApiView(APIView):
             }
 
             PushNotifyBook(request.user.id)
+            PushNotifyAdmin()
             BookNotification(request.user.id, request.data.get('setup'))
-            
+            BookNotificationAdmin(request.user.mobile, request.data.get('setup'))
             # serialized_qs = serializers.serialize('json', send)
             
             return Response(send, status=status.HTTP_201_CREATED)
@@ -960,6 +961,19 @@ def BookNotification(user, setup):
         serializer_notification.save()
     return True
 
+def BookNotificationAdmin(user, setup):
+    note = {
+    'text':  user + ' has booked ' + setup + ' this setup.',
+    'isRead': 'False',
+    'setup': setup,
+    'user': user,
+    }
+
+    serializer_notification = AdminNotificationSerializer(data=note)
+    if serializer_notification.is_valid():
+        serializer_notification.save()
+    return True
+
 def ReleaseNotification(user, setup):
     note = {
     'text': 'Thank you for using our service. on ' + setup + 'this setup.', 
@@ -982,6 +996,22 @@ def PushNotifyBook(uid):
     device.send_message(
         title="Deboo",
         body="you have booked a service",
+        data={
+            "notification type" : 20
+        })
+    print(device)
+    return True
+
+def PushNotifyAdmin():
+    user_data = UserProfile.objects.filter(user_type=1)
+    device = FCMDevice()
+    for i in user_data:
+        device.registration_id = i.profile.fcm_token
+    device.name = "Deboo Android"
+    device.save()
+    device.send_message(
+        title="Deboo",
+        body="A user has booked a service",
         data={
             "notification type" : 20
         })
