@@ -28,6 +28,7 @@ from rest_framework.filters import SearchFilter
 class AdminNotificationApiView(generics.ListAPIView):
     def get_queryset(self):
         queryset = Notification.objects.all()
+        queryset = queryset.order_by('-updatedAt')
         return queryset
 
     serializer_class = NotificationSerializer
@@ -160,6 +161,7 @@ class AdminTransactionsApiView(generics.ListAPIView):
         #         return Response({'reason':'To Date is invalid'}, status=status.HTTP_400_BAD_REQUEST)
         #     toDate = datetime.datetime.fromtimestamp(toDate)
         #     queryset = queryset.filter(createdAt__lte = toDate)
+        queryset = queryset.order_by('-updatedAt')
         return queryset
 
     serializer_class = TransactionSerializer
@@ -195,7 +197,7 @@ class AdminSetupApiView(generics.ListAPIView):
     # permission_classes = [IsAuthenticated]
     def get_queryset(self):
         queryset = Setup.objects.all()
-        
+        queryset = queryset.order_by('-updatedAt')
         return queryset
 
     serializer_class = SetupSerializer
@@ -209,6 +211,7 @@ class AdminUserApiView(generics.ListAPIView):
         setup = self.request.GET.get('setup')
         if setup:
             queryset = queryset.filter(setup=setup)
+        queryset = queryset.order_by('-updatedAt')
         return queryset
     filter_backends = [SearchFilter,]
     serializer_class = UserSerializer
