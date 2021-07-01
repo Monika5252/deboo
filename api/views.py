@@ -1006,7 +1006,7 @@ def PushNotifyAdmin():
     user_data = UserProfile.objects.filter(user_type=1)
     device = FCMDevice()
     for i in user_data:
-        device.registration_id = i.profile.fcm_token
+        device.registration_id = i.fcm_token
     device.name = "Deboo Android"
     device.save()
     device.send_message(
