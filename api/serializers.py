@@ -57,7 +57,7 @@ class UserFeedbackSerializer(ModelSerializer):
     userDetails = UserSerializer(read_only=True)
     class Meta:
         model = Feedback
-        fields = ('id','mobile', 'rate', 'text', 'userDetails','createdAt','updatedAt')
+        fields = ('id','mobile', 'rate', 'text', 'user', 'userDetails','createdAt','updatedAt')
 
 class ContactUsSerializer(ModelSerializer):
     class Meta:
