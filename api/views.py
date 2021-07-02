@@ -800,6 +800,7 @@ class WalletTransactionsApiView(APIView):
             'transaction_id': request.data.get('transaction_id'),
             'amount': request.data.get('amount'),
             'mobile': request.data.get('mobile'),
+            'setup': request.data.get('setup'),
             'wallet_id': request.data.get('w_id'),
             'user': request.user.id,
             'w_id': request.data.get('w_id')
@@ -808,7 +809,31 @@ class WalletTransactionsApiView(APIView):
         serializer = WalletTransactionSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+            data = Setup.objects.filter(id=serializer.data['setup'])
+
+            wallet_data = Wallet.objects.filter(id=serializer.data['w_id'])
+
+            for i in data:
+                data.update(isOccupied=True)
+                data.update(isTransactionComplete=True)
+                data.update(occupiedBy=request.user.id)
+
+            serialized_qs = serializers.serialize('json', data)
+            serialized_wallet = serializers.serialize('json', wallet_data)
+            send = {
+                "data":serializer.data,
+                "setup": serialized_qs,
+                "wallet": serialized_wallet
+            }
+
+            PushNotifyBook(request.user.id)
+            PushNotifyAdmin()
+            BookNotification(request.user.id, request.data.get('setup'))
+            BookNotificationAdmin(request.user.id, request.data.get('setup'))
+            # serialized_qs = serializers.serialize('json', send)
+            
+            return Response(send, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
