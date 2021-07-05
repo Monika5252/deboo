@@ -53,6 +53,8 @@ urlpatterns = [
     url(r'^allstaff/', AdminStaffApiView.as_view()),
     url(r'^alladminnotification/', AdminNotificationAdminApiView.as_view()),
 
-    url(r'^city_state/$', views.CityStateListView.as_view())
+    url(r'^city_state/$', views.CityStateListView.as_view()),
+
+    url(r'^forgot_password/$', views.forget_password_token)
 
 ]

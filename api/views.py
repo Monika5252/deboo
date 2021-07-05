@@ -48,7 +48,6 @@ def refresh_token_view(request):
     if not user.is_active:
         raise exceptions.AuthenticationFailed('user is inactive')
 
-
     access_token = generate_access_token(user)
     return Response({'access_token': access_token})
 
@@ -128,6 +127,23 @@ def login_view(request):
         }
         
         return response
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+# @csrf_protect
+def forget_password_token(request):
+
+    try:
+        user = User.objects.get(mobile=request.data.get('mobile'))
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if user is None:
+        raise exceptions.AuthenticationFailed('User not found')
+
+    access_token = generate_access_token(user)
+    return Response({'access_token': access_token})
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
