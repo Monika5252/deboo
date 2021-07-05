@@ -207,14 +207,14 @@ class AdminSetupApiView(generics.ListAPIView):
 class AdminUserApiView(generics.ListAPIView):
     # permission_classes = [IsAuthenticated]
     def get_queryset(self):
-        queryset = User.objects.filter()
+        queryset = UserProfile.objects.filter()
         setup = self.request.GET.get('setup')
         if setup:
             queryset = queryset.filter(setup=setup)
         return queryset
     filter_backends = [SearchFilter,]
-    serializer_class = UserSerializer
-    search_fields  = ('id','name','email','gender','mobile','age')
+    serializer_class = UserProfileSerializer
+    search_fields  = ('name','email','gender','mobile','age')
 
 class AdminNotificationAdminApiView(generics.ListAPIView):
     def get_queryset(self):
