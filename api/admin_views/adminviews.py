@@ -14,13 +14,6 @@ from fcm_django.models import FCMDevice
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view, permission_classes
-from django.views.decorators.csrf import ensure_csrf_cookie
-from api.utils import generate_access_token, generate_refresh_token
-from rest_framework import exceptions
-import jwt
-from django.conf import settings
-
-from django.views.decorators.csrf import csrf_protect
 from rest_framework import exceptions
 
 from rest_framework.filters import SearchFilter
@@ -202,7 +195,7 @@ class AdminSetupApiView(generics.ListAPIView):
 
     serializer_class = SetupSerializer
     filter_backends = [SearchFilter,]
-    search_fields  = ('name', 'fees','city','country')
+    search_fields  = ('name', 'fees','city','country','address')
 
 class AdminUserApiView(generics.ListAPIView):
     # permission_classes = [IsAuthenticated]
