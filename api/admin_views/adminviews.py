@@ -67,7 +67,7 @@ class AdminInOutCountApiView(generics.ListAPIView):
 
     serializer_class = InOutCountSerializer
     filter_backends = [SearchFilter,]
-    search_fields  = ('inSetup','outSetup')
+    search_fields  = ('setup__name','setup__area','inSetup','outSetup')
 
 
 class InOutDetailsApiView(generics.ListAPIView):
@@ -214,7 +214,7 @@ class AdminUserApiView(generics.ListAPIView):
         return queryset
     filter_backends = [SearchFilter,]
     serializer_class = UserSerializer
-    search_fields  = ('user','mobile','email','profile')
+    search_fields  = ('id','mobile','email','profile__age','profile__name','profile__gender')
 
 class AdminNotificationAdminApiView(generics.ListAPIView):
     def get_queryset(self):
