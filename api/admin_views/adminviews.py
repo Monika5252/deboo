@@ -67,7 +67,7 @@ class AdminInOutCountApiView(generics.ListAPIView):
 
     serializer_class = InOutCountSerializer
     filter_backends = [SearchFilter,]
-    search_fields  = ('area','inSetup','outSetup')
+    search_fields  = ('setup','inSetup','outSetup')
 
 
 class InOutDetailsApiView(generics.ListAPIView):
