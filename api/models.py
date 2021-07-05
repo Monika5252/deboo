@@ -59,8 +59,8 @@ class ContactUs(models.Model):
 class Setup(models.Model):
     name = models.CharField(max_length=30, blank=False)
     address = models.CharField(max_length=255, blank=False)
-    longitude = models.DecimalField(max_digits=19, decimal_places=10, blank=False)
-    latitude = models.DecimalField(max_digits=19, decimal_places=10, blank=False)
+    longitude = models.CharField(max_length=50,blank=False)
+    latitude = models.CharField(max_length=50,blank=False)
     country = models.CharField(max_length=50,blank=True)
     state = models.CharField(max_length=50,blank=True)
     city = models.CharField(max_length=50,blank=True)

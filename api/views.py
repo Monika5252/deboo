@@ -814,7 +814,7 @@ class WalletTransactionsApiView(APIView):
 
             wallet_data = Wallet.objects.filter(id=serializer.data['w_id'])
 
-            for i in data:
+            for i in data: 
                 data.update(isOccupied=True)
                 data.update(isTransactionComplete=True)
                 data.update(occupiedBy=request.user.id)
