@@ -91,7 +91,7 @@ def login_view(request):
             response.set_cookie(key='refreshtoken', value=refresh_token, httponly=True)
             response.data = {
                 'token': access_token,
-                'user_id':serialized_user['profile']['id'],
+                'user_id':request.user.id,
                 'name':serialized_user['profile']['name'],
                 'email':serialized_user['email'],
                 'first_name': serialized_user['first_name'],
@@ -118,7 +118,7 @@ def login_view(request):
         response.set_cookie(key='refreshtoken', value=refresh_token, httponly=True)
         response.data = {
         'token': access_token,
-        'user_id':serialized_user['profile']['id'],
+        'user_id':request.user.id,
         'name':serialized_user['profile']['name'],
         'email':serialized_user['email'],
         'first_name': serialized_user['first_name'],
