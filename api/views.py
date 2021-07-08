@@ -91,7 +91,7 @@ def login_view(request):
             response.set_cookie(key='refreshtoken', value=refresh_token, httponly=True)
             response.data = {
                 'token': access_token,
-                'user_id':request.user.id,
+                'user_id':serialized_user['profile']['id'],
                 'name':serialized_user['profile']['name'],
                 'email':serialized_user['email'],
                 'first_name': serialized_user['first_name'],
@@ -114,11 +114,10 @@ def login_view(request):
         serialized_user = UserSerializer(user,context={'request': request}).data
         access_token = generate_access_token(user)
         refresh_token = generate_refresh_token(user)
-        
         response.set_cookie(key='refreshtoken', value=refresh_token, httponly=True)
         response.data = {
         'token': access_token,
-        'user_id':request.user.id,
+        'user_id':serialized_user['profile']['id'],
         'name':serialized_user['profile']['name'],
         'email':serialized_user['email'],
         'first_name': serialized_user['first_name'],
