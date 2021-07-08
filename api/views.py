@@ -75,7 +75,7 @@ def login_view(request):
         user = User(mobile=mobile, password=password)
         user.set_password(password)
         user.save()
-        UserProfile.objects.create(user=user,user_type=request.data.get('user_type'))
+        UserProfile.objects.create(user=user,user_type=0)
     
     if(user is None and user_type == '1'):
         return Response(
