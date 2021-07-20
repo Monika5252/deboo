@@ -1,0 +1,191 @@
+export ANDROID_HOME=/home/arbaz/Android/Sdk
+export ANDROID_SDK=/home/arbaz/Android/Sdk
+export ANDROID_SDK_ROOT=/home/arbaz/Android/Sdk
+export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools
+export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
+export PATH=$PATH:/opt/gradle/gradle-6.8.1/bin
+
+swagger user id pswrd:
+admin@yopmail.com
+r6gNaDk9u
+
+firebase credentials:
+
+ravi.mobicloud@gmail.com 
+Mobicloud123!@# 
+
+fb app details:
+
+app secret: 496677f077ac15228d5b033f30b8f287
+app ID: 261130635624629
+
+all questions should be hardcoded.
+
+experiment's reference link should be clickable
+
+
+notification url: sent_notification/?user=userId
+
+fcm_token
+
+Dependency on kaushal sir:
+
+1) medium name on educational details-- done
+2) profile picture post api --send on user api
+3) feedback api --Not ready, will be given
+4) filter subjects by board and class api.  --filter on subject api
+5) login user id details? --Not ready, will be given
+6) notifications --Not ready, will be given
+7) user details --Not ready, will be given
+8) Experiment API KT (GET, PUT, POST) -- will discuss
+9) Date & time format (User profile) -- will discuss send in epoch
+10) Get Subjects API Parameters -- done
+
+android sms retriever:
+
+import androidx.annotation.NonNull;
+
+Camera launcher and file provider:
+
+import androidx.core.content.FileProvider;
+
+to do -uncomment otp code, test share app option and share build --done
+
+imp link:
+
+https://devdactic.com/ionic-facebook-login-capacitor/
+
+http://paulsec.github.io/posts/ionic-5-events/
+
+module 1:
+2.5 hrs
+
+module 2:
+1 hr
+30 mnts
+4 hrs
+2 hrs
+
+module 3:
+2 hrs
+
+module 4:
+2 days
+
+module 5:
+3 hrs
+
+module 6:
+15 mnts
+
+module 7:
+2 days
+
+module 9:
+30 mnts
+
+module 10:
+2 days
+
+1) App slider content
+2) About us content
+3) FAQ's content
+4) contact us details
+5) App Feedback questions
+6) App icon
+
+preview: eyJhbGciOiJSUzI1NiIsImtpZCI6IjRlOWRmNWE0ZjI4YWQwMjUwNjRkNjY1NTNiY2I5YjMzOTY4NWVmOTQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdGhlLXByYXlvZyIsImF1ZCI6InRoZS1wcmF5b2ciLCJhdXRoX3RpbWUiOjE2MTk1OTA1NTEsInVzZXJfaWQiOiJEb004M3RYYlZOUU5jV3hJOGl4cTZEUXB1SEYzIiwic3ViIjoiRG9NODN0WGJWTlFOY1d4SThpeHE2RFFwdUhGMyIsImlhdCI6MTYxOTU5MDU1MSwiZXhwIjoxNjE5NTk0MTUxLCJwaG9uZV9udW1iZXIiOiIrOTE5Mjg0MDUzODgzIiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJwaG9uZSI6WyIrOTE5Mjg0MDUzODgzIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGhvbmUifX0.Mwkie0vGH8V5wtMi6wd1M6zjYsAL49ajev1RrouaZpfWURNTTc9aRIoEofJ-TQkk-IyU0QFShWIVRwOwnGzzSC1XzD_-8YqaXv6ASmgF2shAnPjwAIWFUpVUlTv_DiD4ewbrgL7IFFeGjbTni7KqXyiiv7Bj7Qc7oxgq9AOaz1oUYe7eOJkpbLeuGPX_Pzy05TXhGCJG2J_6WA73Bce99aZtPG3dDU7wVtqdx3ItQ7psN5UeSpk7ISfBRXG9iT6SdcIkQbTbSui8PEnWgwNr5fkW76M8CXMeHLlUyG2S35rZfawBPueqPeMFrW_AehLb5UJSzcX--9yDct9f1xRYfw
+
+response: eyJhbGciOiJSUzI1NiIsImtpZCI6IjRlOWRmNWE0ZjI4YWQwMjUwNjRkNjY1NTNiY2I5YjMzOTY4NWVmOTQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdGhlLXByYXlvZyIsImF1ZCI6InRoZS1wcmF5b2ciLCJhdXRoX3RpbWUiOjE2MTk1OTA1NTEsInVzZXJfaWQiOiJEb004M3RYYlZOUU5jV3hJOGl4cTZEUXB1SEYzIiwic3ViIjoiRG9NODN0WGJWTlFOY1d4SThpeHE2RFFwdUhGMyIsImlhdCI6MTYxOTU5MDU1MSwiZXhwIjoxNjE5NTk0MTUxLCJwaG9uZV9udW1iZXIiOiIrOTE5Mjg0MDUzODgzIiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJwaG9uZSI6WyIrOTE5Mjg0MDUzODgzIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGhvbmUifX0.Mwkie0vGH8V5wtMi6wd1M6zjYsAL49ajev1RrouaZpfWURNTTc9aRIoEofJ-TQkk-IyU0QFShWIVRwOwnGzzSC1XzD_-8YqaXv6ASmgF2shAnPjwAIWFUpVUlTv_DiD4ewbrgL7IFFeGjbTni7KqXyiiv7Bj7Qc7oxgq9AOaz1oUYe7eOJkpbLeuGPX_Pzy05TXhGCJG2J_6WA73Bce99aZtPG3dDU7wVtqdx3ItQ7psN5UeSpk7ISfBRXG9iT6SdcIkQbTbSui8PEnWgwNr5fkW76M8CXMeHLlUyG2S35rZfawBPueqPeMFrW_AehLb5UJSzcX--9yDct9f1xRYfw
+
+
+notification redirection --done
+comments label bold --done
+
+New points:
+
+slider screen content-- done
+previosly used nmbers sould not get +1 if pasted -- done
+terms n service and privacy on login page(to do --link pages) -- done
+coming soon on (bio, pysics on dashboard) -- done
+(if valid form check) submitted check on profile page -- done
+
+notification sort by created date -- kaushal sir
+push notification -- kaushal sir
+profile details (username) --kaushal sir
+
+
+
+
+Splash Screen sizes (Capacitor) :
+480  x  320
+800  x  480
+480  x  320
+1280 x  720
+1600 x  980
+1920 x  1280
+480  x  800
+320  x  480
+720  x  1280
+960  x  1600
+1280 x  1920
+
+
+
+For listing = /experiment&subject=id
+for progress status = performed_exp&subject=id
+
+subject id changes for new subject and experiment. == subject can be of same name (kaushal sir's remark).
+notification sorting if readed (done from backend & frontend)
+
+
+Push Notification format from firebase :
+Msg: Push received: {"id":"0:1621442438691050%2c569fe22c569fe2","data":{},"title":"Incomplete Experiment List","body":"Please Complete your experiment As soon as possible"}
+
+Needed & Pending From Backend :
+
+Periodic Table (content, color and categories) :	Pending from kaushal sir
+Notification for current User should be blank : 	Pending from kaushal sir
+Terms & cond. : 					Pending from kaushal sir
+Privacy Policy : 					Pending from kaushal sir
+FAQ's page questions: 					Pending from kaushal sir
+About Us : 						Pending from kaushal sir
+Birthdate of deleted user should be blank :		Pending from kaushal sir
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1) User Login API :
+2) User Profile(Get Put Patch Post) :
+3) User All transactions (My transactions, wallet transactions) :
+4) My wallet (add money in the wallet, Pay from wallet) :
+5) Book Toilet (pay and use) :
+6) Feedback (App feedback, User feedback) :
+7) Contact us (optional) :
+8) Notifications (Put patch get) :
+9) Logout (optional)
+
+https://play.google.com/store/apps/details?id=com.t2d
+
+
+sudo lsof -t -i tcp:8000 | xargs kill -9
+
+
+
+heroku pg:reset DATABASE --confirm debooapi
+heroku run python3 manage.py makemigrations
+heroku run python3 manage.py migrate
+heroku run python3 manage.py createsuperuser
+
+
+
