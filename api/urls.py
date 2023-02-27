@@ -39,11 +39,11 @@ urlpatterns = [
     url(r'^login/', views.login_view, name="login_view"),
     url(r'^refresh_token/', views.refresh_token_view, name="refresh_token"),
 
+    url(r'^walletTransaction/', WalletTransactionsApiView.as_view()),
+    path('walletTransactionDetails/<int:wallet_id>/', WalletTransactionDetailsApiView.as_view()),
+
     url(r'^inout/', AdminInOutCountApiView.as_view()),
     path('inOutdetails/<int:inOut_id>/', InOutDetailsApiView.as_view()),
-
-    url(r'^walletTransaction/', WalletTransactionsApiView.as_view()),
-    path('walletTransactionDetails/<int:inOut_id>/', WalletTransactionDetailsApiView.as_view()),
 
     url(r'^allnotification/', AdminNotificationApiView.as_view()),
     url(r'^allsetup/', AdminSetupApiView.as_view()),

@@ -1,7 +1,8 @@
 
 from api.models import AdminNotification, ContactUs, Feedback, InOutCount, Notification, Setup, SetupTransactionSuccess, StaffProfile, Transaction, User, UserProfile, Wallet, WalletTransaction
 
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, HyperlinkedModelSerializer
+
 
 class UserProfileSerializer(ModelSerializer):
     

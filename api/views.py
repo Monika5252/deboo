@@ -179,7 +179,10 @@ class FeedbackApiView(APIView):
         List all the Feedbacks
         '''
         feed = Feedback.objects.all()
-        serializer = UserFeedbackSerializer(feed, many=True)
+        serializer_context = {
+            'request': request,
+        }
+        serializer = UserFeedbackSerializer(feed,context=serializer_context, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # 2. Create
@@ -220,33 +223,40 @@ class FeedbackDetailsApiView(APIView):
         Retrieves the Feedback with given feedback id
         '''
         feed_instance = self.get_object(feed_id, request.user.id)
+        serializer_context = {
+                'request': request,
+            }
         if not feed_instance:
             return Response(
                 {"res": "Object with this feedback id does not exists"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        serializer = UserFeedbackSerializer(feed_instance)
+        serializer = UserFeedbackSerializer(feed_instance,context=serializer_context)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # 4. Update
+
     def put(self, request, feed_id, *args, **kwargs):
         '''
         Updates the feedback item with given feedback id if exists
         '''
-        feed_instance = self.get_object(feed_id, request.user.id)
+        feed_instance = self.get_object(feed_id,request.user.id )
+        serializer_context = {
+            'request': request,
+        }
         if not feed_instance:
             return Response(
-                {"res": "Object with this feedback id does not exists"}, 
+                {"res": "Object with this feedback id does not exists"},
                 status=status.HTTP_400_BAD_REQUEST
             )
         data = {
-            'mobile': request.data.get('mobile'), 
+            'mobile': request.data.get('mobile'),
             'rate': request.data.get('rate'),
             'text': request.data.get('text'),
             'user': request.user.id
         }
-        serializer = UserFeedbackSerializer(instance = feed_instance, data=data, partial = True)
+        serializer = UserFeedbackSerializer(instance = feed_instance,context=serializer_context, data=data, partial = True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -257,10 +267,10 @@ class FeedbackDetailsApiView(APIView):
         '''
         Deletes the Feedback with given feedback id if exists
         '''
-        feed_instance = self.get_object(feed_id, request.user.id)
+        feed_instance = self.get_object(feed_id,request.user.id)
         if not feed_instance:
             return Response(
-                {"res": "Object with this feedback id does not exists"}, 
+                {"res": "Object with this feedback id does not exists"},
                 status=status.HTTP_400_BAD_REQUEST
             )
         feed_instance.delete()
@@ -268,6 +278,21 @@ class FeedbackDetailsApiView(APIView):
             {"res": "Feedback deleted!"},
             status=status.HTTP_200_OK
         )
+    # def delete(self, request, feed_id, *args, **kwargs):
+    #     '''
+    #     Deletes the Feedback with given feedback id if exists
+    #     '''
+    #     feed_instance = self.get_object(feed_id, request.user.id)
+    #     if not feed_instance:
+    #         return Response(
+    #             {"res": "Object with this feedback id does not exists"},
+    #             status=status.HTTP_400_BAD_REQUEST
+    #         )
+    #     feed_instance.delete()
+    #     return Response(
+    #         {"res": "Feedback deleted!"},
+    #         status=status.HTTP_200_OK
+    #     )
 
 
 class ContactApiView(APIView):
@@ -501,7 +526,18 @@ class OccupySetupView(APIView):
             return Setup.objects.get(id=setup_id)
         except Setup.DoesNotExist:
             return None
-
+    def get(self, request, setup_id):#added
+        '''
+        Retrieves the Contact us with given setup id
+        '''
+        setup_instance = self.get_object(setup_id)
+        if not setup_instance:
+            return Response(
+                {"res": "Record with this Setup id does not exists"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        serializer = SetupSerializer(setup_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     def put(self, request, setup_id, *args, **kwargs):
         '''
         Updates the setup details with given setup id if exists
@@ -536,13 +572,32 @@ class NotificationApiView(APIView):
     # add permission to check if user is authenticated
     # permission_classes = [permissions.IsAuthenticated]
 
+    # def get(self, request, *args, **kwargs):
+    #     '''
+    #     List all the Notifications data
+    #     '''
+    #     notify = Notification.objects.filter(user=request.user.id)
+    #     serializer = NotificationSerializer(notify, many=True)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
     def get(self, request, *args, **kwargs):
         '''
         List all the Notifications data
         '''
-        notify = Notification.objects.filter(user=request.user.id)
-        serializer = NotificationSerializer(notify, many=True)
+        notify = Notification.objects.all()
+        serializer =NotificationSerializer(notify, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        '''
+        Create notifications with given data
+        '''
+        data =request.data
+        serializer = NotificationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class NotificationDetailsApiView(APIView):
     permission_classes = [IsAuthenticated]
@@ -593,6 +648,7 @@ class NotificationDetailsApiView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
     # 5. Delete
     def delete(self, notify_id, request, *args, **kwargs):
@@ -818,9 +874,10 @@ class WalletTransactionsApiView(APIView):
             'amount': request.data.get('amount'),
             'mobile': request.data.get('mobile'),
             'setup': request.data.get('setup'),
-            'wallet_id': request.data.get('w_id'),
-            'user': request.user.id,
+            'wallet_id': request.data.get('wallet_id'),#w_id
+            'user': request.data.get('user.id'),
             'w_id': request.data.get('w_id')
+
         }
 
         serializer = WalletTransactionSerializer(data=data)
@@ -974,11 +1031,11 @@ class WalletDetailsApiView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     # 5. Delete
-    def delete(self, notify_id, *args, **kwargs):
+    def delete(self,request, wallet_id, *args, **kwargs):
         '''
         Deletes Wallet details with given id if exists
         '''
-        wallet_instance = self.get_object(notify_id)
+        wallet_instance = self.get_object(wallet_id)
         if not wallet_instance:
             return Response(
                 {"res": "Wallet with this id does not exists"},
