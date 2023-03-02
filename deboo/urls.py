@@ -15,7 +15,7 @@ Including another URLconf
 """
 
 
-from django.conf.urls import include, url
+from django.urls import re_path as url,include
 from django.contrib import admin
 
 
